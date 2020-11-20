@@ -1,8 +1,6 @@
 package fr.ubx.poo.game;
 
-import fr.ubx.poo.model.decor.Decor;
-import fr.ubx.poo.model.decor.Stone;
-import fr.ubx.poo.model.decor.Tree;
+import fr.ubx.poo.model.decor.*;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -28,6 +26,26 @@ public class WorldBuilder {
 
     private static Decor processEntity(WorldEntity entity) {
         switch (entity) {
+            case BombRangeInc:
+                return new BombRangeInc();
+            case BombRangeDec:
+                return new BombRangeDec();
+            case BombNumberInc:
+                return new BombNumberInc();
+            case BombNumberDec:
+                return new BombNumberDec();
+            case Heart:
+                return new Heart();
+            case DoorNextClosed:
+                return new DoorClosed();
+            case Key:
+                return new Key();
+            case Box:
+                return new Box();
+            case Princess:
+                return new Princess();
+            case Monster:
+                return new Monster();
             case Stone:
                 return new Stone();
             case Tree:
