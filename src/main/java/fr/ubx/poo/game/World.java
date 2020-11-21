@@ -57,6 +57,17 @@ public class World {
     }
 
     public boolean isEmpty(Position position) {
-        return grid.get(position) == null;
+        if (get(position)!=null){
+            if (get(position).toString() == "Monster") return true;
+            if (get(position).toString() == "Key") return true;
+            if (get(position).toString() == "Princess") return true;
+            if (get(position).toString() == "Heart") return true;
+            if (get(position).toString() == "BombNumberDec") return true;
+            if (get(position).toString() == "BombNumberInc") return true;
+            if (get(position).toString() == "BombRangeDec") return true;
+            if (get(position).toString() == "BombRangeInc") return true;
+            return false;
+        }
+        return true;
     }
 }

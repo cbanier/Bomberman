@@ -3,7 +3,7 @@
  */
 
 package fr.ubx.poo.model.go.character;
-
+import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.Position;
 import fr.ubx.poo.model.Movable;
@@ -38,16 +38,28 @@ public class Player extends GameObject implements Movable {
         }
         moveRequested = true;
     }
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
 
     @Override
     public boolean canMove(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
-        return nextPos.inside(game.getWorld().dimension);
+        if (game.getWorld().isEmpty(nextPos)){
+            return nextPos.inside(game.getWorld().dimension);
+        }
+        return false;
     }
 
     public void doMove(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
         setPosition(nextPos);
+        if (game.getWorld().get(nextPos) instanceof Monster){
+            setLives(getLives()-1);
+        }
+        if (game.getWorld().get(nextPos) instanceof Princess){
+            this.winner=true;
+        }
     }
 
     public void update(long now) {
@@ -64,6 +76,7 @@ public class Player extends GameObject implements Movable {
     }
 
     public boolean isAlive() {
+        if(getLives()==0) return false;
         return alive;
     }
 
