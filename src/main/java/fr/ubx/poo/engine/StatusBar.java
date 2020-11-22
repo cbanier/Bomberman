@@ -47,9 +47,9 @@ public class StatusBar {
         HBox status = new HBox();
         status.getStyleClass().add("status");
         HBox live = statusGroup(ImageFactory.getInstance().get(HEART), this.liveValue);
-        HBox bombs = statusGroup(ImageFactory.getInstance().get(BANNER_BOMB), bombsValue);
-        HBox range = statusGroup(ImageFactory.getInstance().get(BANNER_RANGE), rangeValue);
-        HBox key = statusGroup(ImageFactory.getInstance().get(KEY), keyValue);
+        HBox bombs = statusGroup(ImageFactory.getInstance().get(BANNER_BOMB), this.bombsValue);
+        HBox range = statusGroup(ImageFactory.getInstance().get(BANNER_RANGE), this.rangeValue);
+        HBox key = statusGroup(ImageFactory.getInstance().get(KEY), this.keyValue);
         status.setSpacing(40.0);
         status.getChildren().addAll(live, bombs, range, key);
 
@@ -82,9 +82,9 @@ public class StatusBar {
     public void update(Game game) {
         updateLevel(1);
         liveValue.setText(String.valueOf(game.getPlayer().getLives()));
-        rangeValue.setText("?");
-        bombsValue.setText("?");
-        keyValue.setText("?");
+        rangeValue.setText("1");
+        bombsValue.setText("1");
+        keyValue.setText("0");
     }
 
 }
