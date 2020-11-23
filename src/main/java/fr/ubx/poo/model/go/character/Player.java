@@ -48,6 +48,33 @@ public class Player extends GameObject implements Movable {
         if (game.getWorld().isEmpty(nextPos)){
             return nextPos.inside(game.getWorld().dimension);
         }
+        if (game.getWorld().get(nextPos) instanceof Monster){
+            return true;
+        }
+        if (game.getWorld().get(nextPos) instanceof Princess){
+            return true;
+        }
+        if (game.getWorld().get(nextPos) instanceof BombNumberDec){
+            return true;
+        }
+        if (game.getWorld().get(nextPos) instanceof BombNumberInc){
+            return true;
+        }
+        if (game.getWorld().get(nextPos) instanceof BombRangeInc){
+            return true;
+        }
+        if (game.getWorld().get(nextPos) instanceof BombRangeDec){
+            return true;
+        }
+        if (game.getWorld().get(nextPos) instanceof Heart){
+            return true;
+        }
+        if (game.getWorld().get(nextPos) instanceof Key){
+            return true;
+        }
+        if (game.getWorld().get(nextPos) instanceof DoorClosed){
+            return true;
+        }
         return false;
     }
 
