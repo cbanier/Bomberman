@@ -31,6 +31,8 @@ public final class SpriteFactory {
             return new SpriteDecor(layer, factory.get(KEY), position);
         if (decor instanceof DoorClosed)
             return new SpriteDecor(layer, factory.get(DOOR_CLOSED), position);
+        if (decor instanceof DoorOpen)
+            return new SpriteDecor(layer, factory.get(DOOR_OPEN), position);
         if (decor instanceof Heart)
             return new SpriteDecor(layer, factory.get(HEART), position);
         if (decor instanceof BombNumberDec)

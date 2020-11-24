@@ -75,6 +75,9 @@ public class Player extends GameObject implements Movable {
         if (game.getWorld().get(nextPos) instanceof Box){
             return true;
         }
+        if (game.getWorld().get(nextPos) instanceof DoorOpen){
+            return true;
+        }
         return false;
     }
 

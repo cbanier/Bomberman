@@ -8,6 +8,8 @@ import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.view.sprite.Sprite;
 import fr.ubx.poo.view.sprite.SpriteFactory;
 import fr.ubx.poo.game.Game;
+import fr.ubx.poo.game.Position;
+import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.model.go.character.Player;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -106,6 +108,18 @@ public final class GameEngine {
         if (input.isMoveUp()) {
             player.requestMove(Direction.N);
         }
+        if (input.isKey()){
+            Direction direction=player.getDirection();
+            Position nextPos = direction.nextPosition(player.getPosition());
+            DoorOpen open =new DoorOpen();
+            if (game.getWorld().get(nextPos) instanceof DoorClosed){
+                if(game.getInitnbKey()==1){
+                    game.getWorld().setChanged(true);
+                    game.getWorld().set(nextPos, open);
+                    game.initnbKey=0;
+                }
+            }
+        }
         input.clear();
     }
 
@@ -132,8 +146,8 @@ public final class GameEngine {
     private void update(long now) {
         player.update(now);
         if(game.getWorld().hasChanged()){
-            sprites.forEach(Sprite::remove); 
-            sprites.clear();  
+            sprites.forEach(Sprite::remove);
+            sprites.clear();
             game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
             game.getWorld().setChanged(false);
         }
