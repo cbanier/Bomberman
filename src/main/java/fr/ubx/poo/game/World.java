@@ -10,6 +10,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import fr.ubx.poo.game.Game;
+
 public class World {
     private final Map<Position, Decor> grid;
     private final WorldEntity[][] raw;

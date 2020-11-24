@@ -81,6 +81,8 @@ public class Player extends GameObject implements Movable {
     public void doMove(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
         setPosition(nextPos);
+        if (game.getWorld().get(nextPos) instanceof Heart)
+            setLives(getLives()+1);
         if (game.getWorld().get(nextPos) instanceof Monster){
             setLives(getLives()-1);
         }

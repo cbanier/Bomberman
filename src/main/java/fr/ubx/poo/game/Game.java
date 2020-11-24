@@ -20,9 +20,15 @@ public class Game {
     private final String worldPath;
     public int initPlayerLives;
 
+    private WorldEntity[][] raw;
+    private World[] worlds = new World[3];
+
     public Game(String worldPath) {
-        world = new WorldStatic();
         this.worldPath = worldPath;
+        String current_level = worldPath + "/level1.txt";
+        worlds[0] = new WorldFromFile(current_level);
+        world = worlds[0];
+        //world = new WorldStatic();
         loadConfig(worldPath);
         Position positionPlayer = null;
         try {
@@ -57,5 +63,7 @@ public class Game {
         return this.player;
     }
 
-
+    public String getWorldPath() {
+        return worldPath;
+    }
 }
