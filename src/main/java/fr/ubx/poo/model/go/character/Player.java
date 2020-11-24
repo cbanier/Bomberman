@@ -72,7 +72,7 @@ public class Player extends GameObject implements Movable {
         if (game.getWorld().get(nextPos) instanceof Key){
             return true;
         }
-        if (game.getWorld().get(nextPos) instanceof DoorClosed){
+        if (game.getWorld().get(nextPos) instanceof Box){
             return true;
         }
         return false;
@@ -80,14 +80,31 @@ public class Player extends GameObject implements Movable {
 
     public void doMove(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
-        setPosition(nextPos);
-        if (game.getWorld().get(nextPos) instanceof Heart)
-            setLives(getLives()+1);
-        if (game.getWorld().get(nextPos) instanceof Monster){
-            setLives(getLives()-1);
+        Position next=direction.nextPosition(nextPos);
+        if (game.getWorld().get(nextPos) instanceof Box){
+            if (game.getWorld().isEmpty(next)){
+                if(next.inside(game.getWorld().dimension)){
+                game.getWorld().set(next,game.getWorld().get(nextPos));
+                game.getWorld().clear(nextPos);
+                }
+            }
         }
-        if (game.getWorld().get(nextPos) instanceof Princess){
-            this.winner=true;
+        else{
+            setPosition(nextPos);
+            if (game.getWorld().get(nextPos) instanceof Monster){
+                setLives(getLives()-1);
+            }
+            if (game.getWorld().get(nextPos) instanceof Key){
+                game.initnbKey=1;
+                game.getWorld().clear(nextPos);
+            }
+            if (game.getWorld().get(nextPos) instanceof Princess){
+                this.winner=true;
+            }
+            if (game.getWorld().get(nextPos) instanceof Heart){
+            game.getWorld().clear(nextPos);
+            setLives(getLives()+1);
+            }
         }
     }
 

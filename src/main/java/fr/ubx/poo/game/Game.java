@@ -19,6 +19,7 @@ public class Game {
     private final Player player;
     private final String worldPath;
     public int initPlayerLives;
+    public int initnbKey;
 
     private WorldEntity[][] raw;
     private World[] worlds = new World[3];
@@ -44,12 +45,17 @@ public class Game {
         return initPlayerLives;
     }
 
+    public int getInitnbKey() {
+        return initnbKey;
+    }
+
     private void loadConfig(String path) {
         try (InputStream input = new FileInputStream(new File(path, "config.properties"))) {
             Properties prop = new Properties();
             // load the configuration file
             prop.load(input);
             initPlayerLives = Integer.parseInt(prop.getProperty("lives", "3"));
+            initnbKey = Integer.parseInt("0");
         } catch (IOException ex) {
             System.err.println("Error loading configuration");
         }
