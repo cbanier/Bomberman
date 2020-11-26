@@ -111,7 +111,7 @@ public final class GameEngine {
         if (input.isKey()){
             Direction direction=player.getDirection();
             Position nextPos = direction.nextPosition(player.getPosition());
-            DoorOpen open =new DoorOpen();
+            DoorNextOpened open =new DoorNextOpened();
             if (game.getWorld().get(nextPos) instanceof DoorClosed){
                 if(game.getInitnbKey()==1){
                     game.getWorld().setChanged(true);

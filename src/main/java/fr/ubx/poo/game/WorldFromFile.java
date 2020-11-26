@@ -26,6 +26,7 @@ public class WorldFromFile extends World{
                 for (int j=0;j<Lines.size();j++){
                     map[i][j] = WorldEntity.fromCode(Lines.get(i)[j]).orElse(Empty);
                 }
+            in.close();
             }
             return map;
         } catch (IOException e) {
