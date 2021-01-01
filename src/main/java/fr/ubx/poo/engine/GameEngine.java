@@ -130,7 +130,7 @@ public final class GameEngine {
         waitingForKey.setFill(color);
         StackPane root = new StackPane();
         root.getChildren().add(waitingForKey);
-        Scene scene = new Scene(root, 400, 200, Color.WHITE);
+        Scene scene = new Scene(root, 500, 200, Color.CORAL);
         stage.setTitle(windowTitle);
         stage.setScene(scene);
         input = new Input(scene);
@@ -154,11 +154,11 @@ public final class GameEngine {
 
         if (player.isAlive() == false) {
             gameLoop.stop();
-            showMessage("Perdu!", Color.RED);
+            showMessage("Perdu! Tu es \néclaté au sol Boso!", Color.FUCHSIA);
         }
         if (player.isWinner()) {
             gameLoop.stop();
-            showMessage("Gagné", Color.BLUE);
+            showMessage("BTREEEEEEE", Color.TURQUOISE);
         }
     }
 

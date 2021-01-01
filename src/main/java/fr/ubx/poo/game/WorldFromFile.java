@@ -21,9 +21,9 @@ public class WorldFromFile extends World{
                 Lines.add(lineValue.toCharArray());
                 lineValue = in.readLine();
             }
-            WorldEntity[][] map = new WorldEntity[width][Lines.size()];
-            for (int i=0;i<width;i++){
-                for (int j=0;j<Lines.size();j++){
+            WorldEntity[][] map = new WorldEntity[Lines.size()][width];
+            for (int j=0;j<width;j++){
+                for (int i=0;i<Lines.size();i++){
                     map[i][j] = WorldEntity.fromCode(Lines.get(i)[j]).orElse(Empty);
                 }
             in.close();

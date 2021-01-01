@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import fr.ubx.poo.model.go.character.Player;
@@ -21,16 +23,21 @@ public class Game {
     public int initPlayerLives;
     public int initnbKey;
 
+    private int levels;
     private WorldEntity[][] raw;
-    private World[] worlds = new World[3];
+    private List<World> worlds;
 
     public Game(String worldPath) {
         this.worldPath = worldPath;
-        String current_level = worldPath + "/level1.txt";
-        worlds[0] = new WorldFromFile(current_level);
-        world = worlds[0];
-        //world = new WorldStatic();
         loadConfig(worldPath);
+        worlds = new ArrayList<>(levels);
+        for(int i=1; i<=levels; i++){
+            worlds.add(new WorldFromFile(worldPath +"/level"+ i + ".txt"));
+        }
+        //worlds.add(new WorldFromFile(worldPath + "/level3.txt"));
+        //worlds.add(new WorldFromFile(worldPath + "/level2.txt"));
+        world = worlds.get(2);
+        //world = new WorldStatic();
         Position positionPlayer = null;
         try {
             positionPlayer = world.findPlayer();
@@ -56,6 +63,7 @@ public class Game {
             prop.load(input);
             initPlayerLives = Integer.parseInt(prop.getProperty("lives", "3"));
             initnbKey = Integer.parseInt("0");
+            levels = Integer.parseInt(prop.getProperty("lives", "3"));
         } catch (IOException ex) {
             System.err.println("Error loading configuration");
         }
