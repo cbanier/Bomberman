@@ -8,6 +8,7 @@ import fr.ubx.poo.model.decor.Decor;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import fr.ubx.poo.game.Game;
@@ -17,8 +18,12 @@ public class World {
     private final WorldEntity[][] raw;
     public final Dimension dimension;
     private boolean changed = false; 
+    private boolean Up= false;
 
     public boolean hasChanged() { return changed; }
+
+    public boolean hasUp() { return Up; }
+    
 
     public World(WorldEntity[][] raw) {
         this.raw = raw;
@@ -26,8 +31,20 @@ public class World {
         grid = WorldBuilder.build(raw, dimension);
     }
     
-    public boolean setChanged(boolean changed){
-        return changed;
+    public void setChanged(){
+        changed= true;
+    }
+
+    public void finishChanged(){
+        changed=false;
+    }
+
+    public void SetUp(){
+        Up=true;
+    }
+
+    public void SetUpfinish(){
+        Up=false;
     }
 
     public Position findPlayer() throws PositionNotFoundException {
@@ -39,6 +56,17 @@ public class World {
             }
         }
         throw new PositionNotFoundException("Player");
+    }
+
+    public Position finDoor() {
+        for (int x = 0; x < dimension.width; x++) {
+            for (int y = 0; y < dimension.height; y++) {
+                if (raw[y][x] == WorldEntity.DoorPrevOpened) {
+                    return new Position(x, y);
+                }
+            }
+        }
+        return null;
     }
 
     public Decor get(Position position) {
@@ -58,6 +86,8 @@ public class World {
     public void forEach(BiConsumer<Position, Decor> fn) {
         grid.forEach(fn);
     }
+
+
 
     public Collection<Decor> values() {
         return grid.values();

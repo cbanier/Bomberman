@@ -17,13 +17,14 @@ import fr.ubx.poo.model.go.character.Player;
 
 public class Game {
 
-    private final World world;
+    private World world;
     private final Player player;
     private final String worldPath;
     public int initPlayerLives;
     public int initnbKey;
 
     private int levels;
+    private int actualLevel;
     private WorldEntity[][] raw;
     private List<World> worlds;
 
@@ -36,7 +37,8 @@ public class Game {
         }
         //worlds.add(new WorldFromFile(worldPath + "/level3.txt"));
         //worlds.add(new WorldFromFile(worldPath + "/level2.txt"));
-        world = worlds.get(2);
+        actualLevel=1;
+        world = worlds.get(actualLevel-1);
         //world = new WorldStatic();
         Position positionPlayer = null;
         try {
@@ -50,6 +52,10 @@ public class Game {
 
     public int getInitPlayerLives() {
         return initPlayerLives;
+    }
+
+    public int getActualLevel() {
+        return actualLevel;
     }
 
     public int getInitnbKey() {
@@ -79,5 +85,12 @@ public class Game {
 
     public String getWorldPath() {
         return worldPath;
+    }
+    
+
+
+    public void UpWorld(){
+        actualLevel=actualLevel+1;
+        world=worlds.get(actualLevel-1);
     }
 }

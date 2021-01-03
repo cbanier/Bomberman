@@ -6,6 +6,7 @@ package fr.ubx.poo.model.go.character;
 import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.Position;
+import fr.ubx.poo.game.WorldEntity;
 import fr.ubx.poo.model.Movable;
 import fr.ubx.poo.model.go.GameObject;
 import fr.ubx.poo.game.Game;
@@ -103,6 +104,10 @@ public class Player extends GameObject implements Movable {
             if (game.getWorld().get(nextPos) instanceof Key){
                 game.initnbKey=1;
                 game.getWorld().clear(nextPos);
+            }
+            if (game.getWorld().get(nextPos) instanceof DoorNextOpened){
+                game.UpWorld();
+                game.getWorld().SetUp();
             }
             if (game.getWorld().get(nextPos) instanceof Princess){
                 this.winner=true;

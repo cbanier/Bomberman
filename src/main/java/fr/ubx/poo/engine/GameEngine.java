@@ -114,7 +114,7 @@ public final class GameEngine {
             DoorNextOpened open =new DoorNextOpened();
             if (game.getWorld().get(nextPos) instanceof DoorClosed){
                 if(game.getInitnbKey()==1){
-                    game.getWorld().setChanged(true);
+                    game.getWorld().setChanged();
                     game.getWorld().set(nextPos, open);
                     game.initnbKey=0;
                 }
@@ -149,7 +149,18 @@ public final class GameEngine {
             sprites.forEach(Sprite::remove);
             sprites.clear();
             game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
-            game.getWorld().setChanged(false);
+            game.getWorld().finishChanged();
+        }
+
+        if (game.getWorld().hasUp()){
+            stage.close();
+            sprites.forEach(Sprite::remove);
+            sprites.clear();
+            spritePlayer.remove();
+            initialize(stage, game);
+            Position pos =game.getWorld().finDoor();
+            player.setPosition(pos);
+            game.getWorld().SetUpfinish();
         }
 
         if (player.isAlive() == false) {
