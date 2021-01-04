@@ -93,4 +93,9 @@ public class Game {
         actualLevel=actualLevel+1;
         world=worlds.get(actualLevel-1);
     }
+
+    public void DownWorld(){
+        actualLevel=actualLevel-1;
+        world=worlds.get(actualLevel-1);
+    }
 }

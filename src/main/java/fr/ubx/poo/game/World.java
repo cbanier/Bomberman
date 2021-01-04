@@ -19,10 +19,14 @@ public class World {
     public final Dimension dimension;
     private boolean changed = false; 
     private boolean Up= false;
+    private boolean Down=false;
 
     public boolean hasChanged() { return changed; }
 
     public boolean hasUp() { return Up; }
+
+    public boolean hasDown() { return Down; }
+
     
 
     public World(WorldEntity[][] raw) {
@@ -47,6 +51,14 @@ public class World {
         Up=false;
     }
 
+    public void SetDown(){
+        Down=true;
+    }
+
+    public void SetDownfinish(){
+        Down=false;
+    }
+
     public Position findPlayer() throws PositionNotFoundException {
         for (int x = 0; x < dimension.width; x++) {
             for (int y = 0; y < dimension.height; y++) {
@@ -58,10 +70,21 @@ public class World {
         throw new PositionNotFoundException("Player");
     }
 
-    public Position finDoor() {
+    public Position finDoorN() {
         for (int x = 0; x < dimension.width; x++) {
             for (int y = 0; y < dimension.height; y++) {
                 if (raw[y][x] == WorldEntity.DoorPrevOpened) {
+                    return new Position(x, y);
+                }
+            }
+        }
+        return null;
+    }
+
+    public Position finDoorP() {
+        for (int x = 0; x < dimension.width; x++) {
+            for (int y = 0; y < dimension.height; y++) {
+                if (raw[y][x] == WorldEntity.DoorNextClosed) {
                     return new Position(x, y);
                 }
             }

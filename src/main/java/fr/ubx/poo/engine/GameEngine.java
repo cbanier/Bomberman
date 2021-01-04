@@ -158,9 +158,20 @@ public final class GameEngine {
             sprites.clear();
             spritePlayer.remove();
             initialize(stage, game);
-            Position pos =game.getWorld().finDoor();
+            Position pos =game.getWorld().finDoorN();
             player.setPosition(pos);
             game.getWorld().SetUpfinish();
+        }
+
+        if (game.getWorld().hasDown()){
+            stage.close();
+            sprites.forEach(Sprite::remove);
+            sprites.clear();
+            spritePlayer.remove();
+            initialize(stage, game);
+            Position pos =game.getWorld().finDoorP();
+            player.setPosition(pos);
+            game.getWorld().SetDownfinish();
         }
 
         if (player.isAlive() == false) {

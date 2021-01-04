@@ -109,6 +109,10 @@ public class Player extends GameObject implements Movable {
                 game.UpWorld();
                 game.getWorld().SetUp();
             }
+            if (game.getWorld().get(nextPos) instanceof DoorPrevOpened){
+                game.DownWorld();
+                game.getWorld().SetDown();
+            }
             if (game.getWorld().get(nextPos) instanceof Princess){
                 this.winner=true;
             }
