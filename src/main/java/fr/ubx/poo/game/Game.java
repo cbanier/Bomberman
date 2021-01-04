@@ -22,6 +22,8 @@ public class Game {
     private final String worldPath;
     public int initPlayerLives;
     public int initnbKey;
+    public int initNbBombs;
+    public int initRange;
 
     private int levels;
     private int actualLevel;
@@ -35,11 +37,8 @@ public class Game {
         for(int i=1; i<=levels; i++){
             worlds.add(new WorldFromFile(worldPath +"/level"+ i + ".txt"));
         }
-        //worlds.add(new WorldFromFile(worldPath + "/level3.txt"));
-        //worlds.add(new WorldFromFile(worldPath + "/level2.txt"));
         actualLevel=1;
         world = worlds.get(actualLevel-1);
-        //world = new WorldStatic();
         Position positionPlayer = null;
         try {
             positionPlayer = world.findPlayer();
@@ -62,14 +61,24 @@ public class Game {
         return initnbKey;
     }
 
+    public int getInitNbBombs() {
+        return initNbBombs;
+    }
+
+    public int getInitRange() {
+        return initRange;
+    }
+
     private void loadConfig(String path) {
         try (InputStream input = new FileInputStream(new File(path, "config.properties"))) {
             Properties prop = new Properties();
             // load the configuration file
             prop.load(input);
             initPlayerLives = Integer.parseInt(prop.getProperty("lives", "3"));
-            initnbKey = Integer.parseInt("0");
+            initnbKey = 0;
             levels = Integer.parseInt(prop.getProperty("lives", "3"));
+            initNbBombs = 1;
+            initRange = 1;
         } catch (IOException ex) {
             System.err.println("Error loading configuration");
         }
@@ -86,8 +95,6 @@ public class Game {
     public String getWorldPath() {
         return worldPath;
     }
-    
-
 
     public void UpWorld(){
         actualLevel=actualLevel+1;

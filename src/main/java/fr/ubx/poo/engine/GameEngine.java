@@ -5,6 +5,7 @@
 package fr.ubx.poo.engine;
 
 import fr.ubx.poo.game.Direction;
+import fr.ubx.poo.model.Movable;
 import fr.ubx.poo.view.sprite.Sprite;
 import fr.ubx.poo.view.sprite.SpriteFactory;
 import fr.ubx.poo.game.Game;
@@ -120,6 +121,13 @@ public final class GameEngine {
                 }
             }
         }
+        if (input.isBomb() && player.getNbBombs()>1){
+            Direction direction = player.getDirection();
+            Position bombPos = direction.nextPosition(player.getPosition(), player.getBombRange());
+            //faire en sorte de lancer la bombe uniquement sur rien, un monstre, ou une box
+            game.getWorld().set(bombPos, new BombNumberInc());
+            player.setNbBombs(player.getNbBombs()-1);
+        }
         input.clear();
     }
 
@@ -130,7 +138,7 @@ public final class GameEngine {
         waitingForKey.setFill(color);
         StackPane root = new StackPane();
         root.getChildren().add(waitingForKey);
-        Scene scene = new Scene(root, 500, 200, Color.CORAL);
+        Scene scene = new Scene(root, 400, 200, Color.WHITE);
         stage.setTitle(windowTitle);
         stage.setScene(scene);
         input = new Input(scene);
@@ -176,11 +184,11 @@ public final class GameEngine {
 
         if (player.isAlive() == false) {
             gameLoop.stop();
-            showMessage("Perdu! Tu es \néclaté au sol Boso!", Color.FUCHSIA);
+            showMessage("Perdu!", Color.RED);
         }
         if (player.isWinner()) {
             gameLoop.stop();
-            showMessage("BTREEEEEEE", Color.TURQUOISE);
+            showMessage("Gagné", Color.TURQUOISE);
         }
     }
 

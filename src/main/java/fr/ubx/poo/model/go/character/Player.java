@@ -18,6 +18,8 @@ public class Player extends GameObject implements Movable {
     private boolean moveRequested = false;
     private int lives = 1;
     private boolean winner;
+    private int nbBombs = 1;
+    private int bombRange = 1;
 
     public Player(Game game, Position position) {
         super(game, position);
@@ -39,6 +41,7 @@ public class Player extends GameObject implements Movable {
         }
         moveRequested = true;
     }
+
     public void setLives(int lives) {
         this.lives = lives;
     }
@@ -117,8 +120,27 @@ public class Player extends GameObject implements Movable {
                 this.winner=true;
             }
             if (game.getWorld().get(nextPos) instanceof Heart){
-            game.getWorld().clear(nextPos);
-            setLives(getLives()+1);
+                game.getWorld().clear(nextPos);
+                setLives(getLives()+1);
+            }
+            if (game.getWorld().get(nextPos) instanceof BombNumberInc){
+                game.getWorld().clear(nextPos);
+                setNbBombs(getNbBombs()+1);
+            }
+            if (game.getWorld().get(nextPos) instanceof BombNumberDec){
+                if (getNbBombs()>1)
+                    game.getWorld().clear(nextPos);
+                    setNbBombs(getNbBombs()-1);
+            }
+            if (game.getWorld().get(nextPos) instanceof BombRangeInc){
+                game.getWorld().clear(nextPos);
+                setBombRange(getBombRange()+1);
+            }
+            if (game.getWorld().get(nextPos) instanceof BombRangeDec){
+                if (getBombRange()>1){
+                    game.getWorld().clear(nextPos);
+                    setBombRange(getBombRange()-1);
+                }
             }
         }
     }
@@ -140,5 +162,19 @@ public class Player extends GameObject implements Movable {
         if(getLives()==0) return false;
         return alive;
     }
+    public int getNbBombs() {
+        return nbBombs;
+    }
 
+    public void setNbBombs(int nbBombs) {
+        this.nbBombs = nbBombs;
+    }
+
+    public int getBombRange() {
+        return bombRange;
+    }
+
+    public void setBombRange(int bombRange) {
+        this.bombRange = bombRange;
+    }
 }
