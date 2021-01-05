@@ -9,16 +9,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import fr.ubx.poo.model.go.character.Player;
+import fr.ubx.poo.model.go.character.Monster;
 
 public class Game {
 
     private World world;
     private final Player player;
+    private final Monster monster;
     private final String worldPath;
     public int initPlayerLives;
     public int initnbKey;
@@ -39,6 +39,8 @@ public class Game {
         }
         actualLevel=1;
         world = worlds.get(actualLevel-1);
+        Position positionMonster=world.findMonster();
+        monster= new Monster(this, positionMonster);
         Position positionPlayer = null;
         try {
             positionPlayer = world.findPlayer();
@@ -47,6 +49,7 @@ public class Game {
             System.err.println("Position not found : " + e.getLocalizedMessage());
             throw new RuntimeException(e);
         }
+
     }
 
     public int getInitPlayerLives() {
@@ -90,6 +93,10 @@ public class Game {
 
     public Player getPlayer() {
         return this.player;
+    }
+
+    public Monster getMonster() {
+        return this.monster;
     }
 
     public String getWorldPath() {

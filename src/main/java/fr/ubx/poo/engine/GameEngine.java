@@ -12,6 +12,7 @@ import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.Position;
 import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.model.go.character.Player;
+import fr.ubx.poo.model.go.character.Monster;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -34,17 +35,21 @@ public final class GameEngine {
     private final String windowTitle;
     private final Game game;
     private final Player player;
+    private Monster monster;
     private final List<Sprite> sprites = new ArrayList<>();
     private StatusBar statusBar;
     private Pane layer;
     private Input input;
     private Stage stage;
     private Sprite spritePlayer;
+    private Sprite spriteMonster;
+    private long cpt;
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
         this.windowTitle = windowTitle;
         this.game = game;
         this.player = game.getPlayer();
+        this.monster=game.getMonster();
         initialize(stage, game);
         buildAndSetGameLoop();
     }
@@ -72,6 +77,8 @@ public final class GameEngine {
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
         spritePlayer = SpriteFactory.createPlayer(layer, player);
+        spriteMonster= SpriteFactory.createMonster(layer, monster);
+        cpt=0;
 
     }
 
@@ -82,6 +89,12 @@ public final class GameEngine {
                 processInput(now);
 
                 // Do actions
+                cpt++;
+                if (cpt%60==0){
+                    Direction dir= Direction.random();
+                    monster.requestMove(dir);
+                    monster.doMove(dir);
+                }
                 update(now);
 
                 // Graphic update
@@ -196,6 +209,7 @@ public final class GameEngine {
         sprites.forEach(Sprite::render);
         // last rendering to have player in the foreground
         spritePlayer.render();
+        spriteMonster.render();
     }
 
     public void start() {

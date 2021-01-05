@@ -7,9 +7,14 @@ package fr.ubx.poo.game;
 import fr.ubx.poo.model.decor.Decor;
 
 import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Properties;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+
+import fr.ubx.poo.model.go.character.Monster;
 
 import fr.ubx.poo.game.Game;
 
@@ -33,6 +38,9 @@ public class World {
         this.raw = raw;
         dimension = new Dimension(raw.length, raw[0].length);
         grid = WorldBuilder.build(raw, dimension);
+        changed = false; 
+        Up= false;
+        Down=false;
     }
     
     public void setChanged(){
@@ -68,6 +76,17 @@ public class World {
             }
         }
         throw new PositionNotFoundException("Player");
+    }
+
+    public Position findMonster(){
+        for (int x = 0; x < dimension.width; x++) {
+            for (int y = 0; y < dimension.height; y++) {
+                if (raw[y][x] == WorldEntity.Monster) {
+                    return new Position(x, y);
+                }
+            }
+        }
+        return null;
     }
 
     public Position finDoorN() {

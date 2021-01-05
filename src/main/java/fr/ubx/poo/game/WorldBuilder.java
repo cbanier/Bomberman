@@ -48,8 +48,6 @@ public class WorldBuilder {
                 return new Box();
             case Princess:
                 return new Princess();
-            case Monster:
-                return new Monster();
             case Stone:
                 return new Stone();
             case Tree:
