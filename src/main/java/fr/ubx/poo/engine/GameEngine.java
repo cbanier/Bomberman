@@ -89,12 +89,6 @@ public final class GameEngine {
                 processInput(now);
 
                 // Do actions
-                cpt++;
-                if (cpt%60==0){
-                    Direction dir= Direction.random();
-                    monster.requestMove(dir);
-                    monster.doMove(dir);
-                }
                 update(now);
 
                 // Graphic update
@@ -163,6 +157,12 @@ public final class GameEngine {
 
     private void update(long now) {
         player.update(now);
+        cpt++;
+        if (cpt%60==0){
+            Direction dir= Direction.random();
+            monster.requestMove(dir);
+                monster.doMove(dir);
+        }
         if(game.getWorld().hasChanged()){
             sprites.forEach(Sprite::remove);
             sprites.clear();
@@ -172,23 +172,21 @@ public final class GameEngine {
 
         if (game.getWorld().hasUp()){
             stage.close();
-            sprites.forEach(Sprite::remove);
-            sprites.clear();
-            spritePlayer.remove();
             initialize(stage, game);
             Position pos =game.getWorld().finDoorN();
             player.setPosition(pos);
+            Position monsterpos=game.getWorld().findMonster();
+            monster.setPosition(monsterpos);
             game.getWorld().SetUpfinish();
         }
 
         if (game.getWorld().hasDown()){
             stage.close();
-            sprites.forEach(Sprite::remove);
-            sprites.clear();
-            spritePlayer.remove();
             initialize(stage, game);
             Position pos =game.getWorld().finDoorP();
             player.setPosition(pos);
+            Position monsterpos=game.getWorld().findMonster();
+            monster.setPosition(monsterpos);
             game.getWorld().SetDownfinish();
         }
 
