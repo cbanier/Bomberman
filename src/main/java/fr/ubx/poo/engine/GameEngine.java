@@ -135,10 +135,7 @@ public final class GameEngine {
             }
         }
         if (input.isBomb() && player.getNbBombs()>1){
-            Direction direction = player.getDirection();
-            Position bombPos = direction.nextPosition(player.getPosition(), player.getBombRange());
-            //faire en sorte de lancer la bombe uniquement sur rien, un monstre, ou une box
-            game.getWorld().set(bombPos, new BombNumberInc());
+            game.getWorld().set(player.getPosition(), new BombNumberInc());
             player.setNbBombs(player.getNbBombs()-1);
         }
         input.clear();
