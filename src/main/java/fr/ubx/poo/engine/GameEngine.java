@@ -6,6 +6,8 @@ package fr.ubx.poo.engine;
 
 import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.model.Movable;
+import fr.ubx.poo.model.go.Bombs;
+import fr.ubx.poo.model.go.GameObject;
 import fr.ubx.poo.view.sprite.Sprite;
 import fr.ubx.poo.view.sprite.SpriteFactory;
 import fr.ubx.poo.game.Game;
@@ -36,6 +38,7 @@ public final class GameEngine {
     private final Game game;
     private final Player player;
     private Monster monster;
+    private final List<GameObject> bombList = new ArrayList<>();
     private final List<Sprite> sprites = new ArrayList<>();
     private StatusBar statusBar;
     private Pane layer;
@@ -44,6 +47,7 @@ public final class GameEngine {
     private Sprite spritePlayer;
     private Sprite spriteMonster;
     private long cpt;
+    public long now;
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
         this.windowTitle = windowTitle;
@@ -94,6 +98,7 @@ public final class GameEngine {
                     Direction dir= Direction.random();
                     monster.requestMove(dir);
                     monster.doMove(dir);
+
                 }
                 update(now);
 
@@ -135,6 +140,7 @@ public final class GameEngine {
             }
         }
         if (input.isBomb() && player.getNbBombs()>1){
+            //Bomb4 bomb = new Bomb4(game, player.getPosition());
             game.getWorld().set(player.getPosition(), new BombNumberInc());
             player.setNbBombs(player.getNbBombs()-1);
         }
@@ -211,5 +217,9 @@ public final class GameEngine {
 
     public void start() {
         gameLoop.start();
+    }
+
+    public long getNow() {
+        return now;
     }
 }

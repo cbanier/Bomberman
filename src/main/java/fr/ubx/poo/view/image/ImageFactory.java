@@ -20,7 +20,11 @@ public final class ImageFactory {
     private final ImageResource[] directions_m = new ImageResource[]{
         // Direction { N, E, S, W }
         MONSTER_UP, MONSTER_RIGHT, MONSTER_DOWN, MONSTER_LEFT,
-};
+    };
+
+    private final ImageResource[] bombs_states = new ImageResource[]{
+            BOMB_4SEC, BOMB_3SEC, BOMB_2SEC, BOMB_1SEC, EXPLOSION,
+    };
 
     private final ImageResource[] digits = new ImageResource[]{
             DIGIT_0, DIGIT_1, DIGIT_2, DIGIT_3, DIGIT_4,
@@ -64,6 +68,12 @@ public final class ImageFactory {
 
     public Image getMonster(Direction direction) {
         return get(directions_m[direction.ordinal()]);
+    }
+
+    public Image getBombs(int state){
+        if (state < -1 || state > 5)
+            throw new IllegalArgumentException();
+        return get(bombs_states[state]);
     }
 
     /**
