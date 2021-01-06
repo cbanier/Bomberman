@@ -93,13 +93,7 @@ public final class GameEngine {
                 processInput(now);
 
                 // Do actions
-                cpt++;
-                if (cpt%60==0){
-                    Direction dir= Direction.random();
-                    monster.requestMove(dir);
-                    monster.doMove(dir);
 
-                }
                 update(now);
 
                 // Graphic update
@@ -140,7 +134,6 @@ public final class GameEngine {
             }
         }
         if (input.isBomb() && player.getNbBombs()>1){
-            //Bomb4 bomb = new Bomb4(game, player.getPosition());
             game.getWorld().set(player.getPosition(), new BombNumberInc());
             player.setNbBombs(player.getNbBombs()-1);
         }
@@ -169,6 +162,12 @@ public final class GameEngine {
 
     private void update(long now) {
         player.update(now);
+        cpt++;
+        if (cpt%60==0){
+            Direction dir= Direction.random();
+            monster.requestMove(dir);
+                monster.doMove(dir);
+        }
         if(game.getWorld().hasChanged()){
             sprites.forEach(Sprite::remove);
             sprites.clear();

@@ -23,6 +23,10 @@ public class Monster extends GameObject implements Movable {
         this.lives = 1;
     }
 
+    public World getWorld() {
+        return world;
+    }
+
     public int getLives() {
         return lives;
     }
@@ -79,9 +83,9 @@ public class Monster extends GameObject implements Movable {
         Position nextPos = direction.nextPosition(getPosition());
         if(canMove(direction)){
             this.setPosition(nextPos);
+            world.setChanged();
             if (game.getPlayer().getPosition().equals(this.getPosition())){
                 game.getPlayer().setLives(game.getPlayer().getLives()-1);;
-
             }
         }
 
