@@ -166,7 +166,7 @@ public final class GameEngine {
         if (cpt%60==0){
             Direction dir= Direction.random();
             monster.requestMove(dir);
-                monster.doMove(dir);
+            monster.doMove(dir);
         }
         if(game.getWorld().hasChanged()){
             sprites.forEach(Sprite::remove);

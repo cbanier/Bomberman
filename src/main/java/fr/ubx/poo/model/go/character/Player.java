@@ -93,8 +93,7 @@ public class Player extends GameObject implements Movable {
         Position next=direction.nextPosition(nextPos);
         Monster monster= game.getMonster();
         if (game.getWorld().get(nextPos) instanceof Box){
-            if (monster.getPosition().equals(next)){ ;}
-            if (game.getWorld().isEmpty(next)){
+            if (game.getWorld().isEmpty(next) && !monster.getPosition().equals(next) ){
                 if(next.inside(game.getWorld().dimension)){
                 game.getWorld().set(next,game.getWorld().get(nextPos));
                 game.getWorld().clear(nextPos);
