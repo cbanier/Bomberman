@@ -89,7 +89,7 @@ public class Player extends GameObject implements Movable {
         Position nextPos = direction.nextPosition(getPosition());
         Position next=direction.nextPosition(nextPos);
         if (game.getWorld().get(nextPos) instanceof Box){
-            if (game.getWorld().isEmpty(next) && !game.getMonsterWorld().stream().anyMatch(monster -> monster.getPosition().equals(next))){
+            if (game.getWorld().isEmpty(next) && !this.game.getWorld().getMonsters().stream().anyMatch(monster -> monster.getPosition().equals(next))){
                 if(next.inside(game.getWorld().dimension)){
                 game.getWorld().set(next,game.getWorld().get(nextPos));
                 game.getWorld().clear(nextPos);
@@ -98,9 +98,8 @@ public class Player extends GameObject implements Movable {
         }
         else{
             setPosition(nextPos);
-
-            if (game.getMonsterWorld().stream().anyMatch(monster -> monster.getPosition().equals(nextPos))){
-                setLives(getLives()-1);
+            if (this.game.getWorld().getMonsters().stream().anyMatch(monster -> monster.getPosition().equals(nextPos))){
+                game.getWorld().setChanged();
             }
             if (game.getWorld().get(nextPos) instanceof Key){
                 game.initnbKey=1;

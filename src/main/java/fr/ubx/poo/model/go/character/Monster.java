@@ -16,9 +16,9 @@ public class Monster extends GameObject implements Movable {
     private int lives = 1;
 
 
-    public Monster(Game game, Position position) {
+    public Monster(Game game, Position position, World world) {
         super(game, position);
-        world=game.getWorld();
+        this.world=world;
         this.direction = Direction.random();
         this.lives = 1;
     }
@@ -49,34 +49,34 @@ public class Monster extends GameObject implements Movable {
     @Override
     public boolean canMove(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
-        if (game.getWorld().isEmpty(nextPos)){
-            return nextPos.inside(game.getWorld().dimension);
+        if (this.world.isEmpty(nextPos)){
+            return nextPos.inside(world.dimension);
         }
-        if (game.getWorld().get(nextPos) instanceof Princess){
+        if (this.world.get(nextPos) instanceof Princess){
             return false;
         }
-        if (game.getWorld().get(nextPos) instanceof Stone){
+        if (this.world.get(nextPos) instanceof Stone){
             return false;
         }
-        if (game.getWorld().get(nextPos) instanceof Tree){
+        if (this.world.get(nextPos) instanceof Tree){
             return false;
         }
-        if (game.getWorld().get(nextPos) instanceof BombNumberDec){
+        if (this.world.get(nextPos) instanceof BombNumberDec){
             return false;
         }
-        if (game.getWorld().get(nextPos) instanceof BombNumberInc){
+        if (this.world.get(nextPos) instanceof BombNumberInc){
             return true;
         }
-        if (game.getWorld().get(nextPos) instanceof BombRangeInc){
+        if (this.world.get(nextPos) instanceof BombRangeInc){
             return true;
         }
-        if (game.getWorld().get(nextPos) instanceof BombRangeDec){
+        if (this.world.get(nextPos) instanceof BombRangeDec){
             return true;
         }
-        if (game.getWorld().get(nextPos) instanceof Heart){
+        if (this.world.get(nextPos) instanceof Heart){
             return true;
         }
-        if (game.getWorld().get(nextPos) instanceof Key){
+        if (world.get(nextPos) instanceof Key){
             return true;
         }
         if(nextPos==game.getPlayer().getPosition()){
@@ -90,9 +90,6 @@ public class Monster extends GameObject implements Movable {
         if(canMove(direction)){
             this.setPosition(nextPos);
             world.setChanged();
-            if (game.getPlayer().getPosition().equals(this.getPosition())){
-                game.getPlayer().setLives(game.getPlayer().getLives()-1);;
-            }
         }
 
     }

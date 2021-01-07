@@ -19,7 +19,6 @@ public class Game {
     private World world;
     private final Player player;
     private final List<List<Monster>> monsterList;
-    private List<Monster> monsterWorld;
     private final String worldPath;
     public int initPlayerLives;
     public int initnbKey;
@@ -41,12 +40,10 @@ public class Game {
         actualLevel=1;
         world = worlds.get(actualLevel-1);
         monsterList =  new ArrayList<List<Monster>>(levels);
-        monsterWorld = new ArrayList<>();
         loadAllMonster();
         for (int i=0; i< levels; i++){
             monsterList.add(i, worlds.get(i).getMonsters());
         }
-        monsterWorld=monsterList.get(getActualLevel()-1);
         Position positionPlayer=null;
         try {
             positionPlayer = world.findPlayer();
@@ -60,6 +57,14 @@ public class Game {
 
     public int getInitPlayerLives() {
         return initPlayerLives;
+    }
+
+    public List<World> getWorlds() {
+        return worlds;
+    }
+
+    public int getLevels() {
+        return levels;
     }
 
     public int getActualLevel() {
@@ -105,22 +110,10 @@ public class Game {
         return monsterList;
     }
 
-    public List<Monster> getMonsterWorld() {
-        return monsterWorld;
-    }
-
-    private void loadMonster() {
-        monsterWorld.clear();
-        for (int i = 0; i < world.findMonster().size(); i++) {
-            monsterWorld.add(new Monster(this, world.findMonster().get(i)));
-        }
-    }
-
-
     private void loadAllMonster() {
         for (int i=0; i<levels;i++){
-            for (int j = 0; j < this.world.findMonster().size(); j++) {
-                worlds.get(i).getMonsters().add(new Monster(this, worlds.get(i).findMonster().get(j)));
+            for (int j = 0; j < worlds.get(i).findMonster().size(); j++) {
+                worlds.get(i).getMonsters().add(new Monster(this, worlds.get(i).findMonster().get(j), this.worlds.get(i)));
             }
         }
     }
@@ -132,13 +125,11 @@ public class Game {
     public void UpWorld(){
         actualLevel=actualLevel+1;
         world=worlds.get(actualLevel-1);
-        loadMonster();
 
     }
 
     public void DownWorld(){
         actualLevel=actualLevel-1;
         world=worlds.get(actualLevel-1);
-        loadMonster();
     }
 }

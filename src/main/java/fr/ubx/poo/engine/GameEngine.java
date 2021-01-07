@@ -80,7 +80,7 @@ public final class GameEngine {
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
         spritePlayer = SpriteFactory.createPlayer(layer, player);
-        game.getMonsterWorld().stream().map(monster -> SpriteFactory.createMonster(layer, monster)).forEach(spritesMonster::add);
+        game.getWorld().getMonsters().stream().map(monster -> SpriteFactory.createMonster(layer, monster)).forEach(spritesMonster::add);
         cpt=0;
 
     }
@@ -163,9 +163,10 @@ public final class GameEngine {
         player.update(now);
         cpt++;
         if (cpt%60==0){
-            game.getMonsterList().forEach(L-> L.forEach(monster -> {monster.requestMove(Direction.random()); monster.doMove(monster.getDirection()); } ));
+            game.getMonsterList().forEach(L -> L.forEach(monster -> {monster.requestMove(Direction.random()); monster.doMove(monster.getDirection()); } ));
         }
         if(game.getWorld().hasChanged()){
+            DecreaseLifePlayer();
             sprites.forEach(Sprite::remove);
             sprites.clear();
             game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
@@ -221,5 +222,14 @@ public final class GameEngine {
 
     public long getNow() {
         return now;
+    }
+
+    public void DecreaseLifePlayer(){
+        for (int i=0 ; i < game.getWorld().getMonsters().size(); i++){
+            if ( game.getWorld().getMonsters().get(i).getPosition().equals(game.getPlayer().getPosition())){
+                game.getPlayer().setLives(game.getPlayer().getLives()-1);;
+            }
+            else{ ;}
+        }
     }
 }
