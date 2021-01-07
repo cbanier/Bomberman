@@ -80,9 +80,6 @@ public final class GameEngine {
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
         spritePlayer = SpriteFactory.createPlayer(layer, player);
-        for (int i=0; i<3 ; i++){
-            game.getMonsterList().get(i).stream().map(monster -> SpriteFactory.createMonster(layer, monster));
-        }
         game.getMonsterWorld().stream().map(monster -> SpriteFactory.createMonster(layer, monster)).forEach(spritesMonster::add);
         cpt=0;
 
@@ -180,6 +177,8 @@ public final class GameEngine {
             sprites.forEach(Sprite::remove);
             sprites.clear();
             spritePlayer.remove();
+            spritesMonster.forEach(Sprite::remove);
+            spritesMonster.clear();
             initialize(stage, game);
             Position pos =game.getWorld().finDoorN();
             player.setPosition(pos);
@@ -191,6 +190,8 @@ public final class GameEngine {
             sprites.forEach(Sprite::remove);
             sprites.clear();
             spritePlayer.remove();
+            spritesMonster.forEach(Sprite::remove);
+            spritesMonster.clear();
             initialize(stage, game);
             Position pos =game.getWorld().finDoorP();
             player.setPosition(pos);

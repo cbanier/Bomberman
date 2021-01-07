@@ -53,7 +53,7 @@ public class Monster extends GameObject implements Movable {
             return nextPos.inside(game.getWorld().dimension);
         }
         if (game.getWorld().get(nextPos) instanceof Princess){
-            return true;
+            return false;
         }
         if (game.getWorld().get(nextPos) instanceof Stone){
             return false;

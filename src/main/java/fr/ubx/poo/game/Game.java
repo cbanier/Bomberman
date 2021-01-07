@@ -119,9 +119,6 @@ public class Game {
 
     private void loadAllMonster() {
         for (int i=0; i<levels;i++){
-            worlds.get(i).getMonsters().clear();
-        }
-        for (int i=0; i<levels;i++){
             for (int j = 0; j < this.world.findMonster().size(); j++) {
                 worlds.get(i).getMonsters().add(new Monster(this, worlds.get(i).findMonster().get(j)));
             }
