@@ -38,7 +38,7 @@ public final class GameEngine {
     private final Game game;
     private final Player player;
     private Monster monster;
-    private final List<GameObject> bombList = new ArrayList<>();
+    private Bombs bomb;
     private final List<Sprite> sprites = new ArrayList<>();
     private StatusBar statusBar;
     private Pane layer;
@@ -46,6 +46,7 @@ public final class GameEngine {
     private Stage stage;
     private Sprite spritePlayer;
     private Sprite spriteMonster;
+    private Sprite spriteBomb;
     private long cpt;
     public long now;
 
@@ -54,6 +55,7 @@ public final class GameEngine {
         this.game = game;
         this.player = game.getPlayer();
         this.monster=game.getMonster();
+        this.bomb = game.getBombs();
         initialize(stage, game);
         buildAndSetGameLoop();
     }
@@ -122,9 +124,9 @@ public final class GameEngine {
             player.requestMove(Direction.N);
         }
         if (input.isKey()){
-            Direction direction=player.getDirection();
+            Direction direction = player.getDirection();
             Position nextPos = direction.nextPosition(player.getPosition());
-            DoorNextOpened open =new DoorNextOpened();
+            DoorNextOpened open = new DoorNextOpened();
             if (game.getWorld().get(nextPos) instanceof DoorClosed){
                 if(game.getInitnbKey()==1){
                     game.getWorld().setChanged();
@@ -133,9 +135,16 @@ public final class GameEngine {
                 }
             }
         }
-        if (input.isBomb() && player.getNbBombs()>1){
-            game.getWorld().set(player.getPosition(), new BombNumberInc());
-            player.setNbBombs(player.getNbBombs()-1);
+        if (input.isBomb()){
+            int bomb_state = 0;
+            Position bomPos = player.getPosition();
+            Bomb4 bomb4 = new Bomb4(game, bomPos);
+            Bomb3 bomb3 = new Bomb3(game, bomPos);
+            Bomb2 bomb2 = new Bomb2(game, bomPos);
+            Bomb1 bomb1 = new Bomb1(game, bomPos);
+            game.getWorld().setChanged();
+            //game.getWorld().set(player.getPosition(), new BombNumberInc());
+            //player.setNbBombs(player.getNbBombs()-1);
         }
         input.clear();
     }
@@ -166,7 +175,7 @@ public final class GameEngine {
         if (cpt%60==0){
             Direction dir= Direction.random();
             monster.requestMove(dir);
-                monster.doMove(dir);
+            monster.doMove(dir);
         }
         if(game.getWorld().hasChanged()){
             sprites.forEach(Sprite::remove);

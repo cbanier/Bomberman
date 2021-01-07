@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+import fr.ubx.poo.model.go.Bombs;
 import fr.ubx.poo.model.go.character.Player;
 import fr.ubx.poo.model.go.character.Monster;
 
@@ -19,6 +20,7 @@ public class Game {
     private World world;
     private final Player player;
     private final Monster monster;
+    private final Bombs bombs;
     private final String worldPath;
     public int initPlayerLives;
     public int initnbKey;
@@ -44,6 +46,7 @@ public class Game {
         Position positionPlayer = null;
         try {
             positionPlayer = world.findPlayer();
+            bombs = new Bombs(this, positionPlayer);
             player = new Player(this, positionPlayer);
         } catch (PositionNotFoundException e) {
             System.err.println("Position not found : " + e.getLocalizedMessage());
@@ -97,6 +100,10 @@ public class Game {
 
     public Monster getMonster() {
         return this.monster;
+    }
+
+    public Bombs getBombs() {
+        return bombs;
     }
 
     public String getWorldPath() {

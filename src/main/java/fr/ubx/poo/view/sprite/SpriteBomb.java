@@ -1,10 +1,11 @@
 package fr.ubx.poo.view.sprite;
 
+import fr.ubx.poo.engine.GameEngine;
 import fr.ubx.poo.model.go.Bombs;
-import fr.ubx.poo.model.go.character.Player;
 import fr.ubx.poo.view.image.ImageFactory;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.layout.Pane;
+
 
 public class SpriteBomb extends SpriteGameObject{
     private final ColorAdjust effect = new ColorAdjust();
@@ -16,7 +17,7 @@ public class SpriteBomb extends SpriteGameObject{
 
     @Override
     public void updateImage() {
-        Bombs bomb = (Bombs) go;
-        setImage(ImageFactory.getInstance().getBombs(bomb.bombActions()));
+        Bombs bombs = (Bombs) go;
+        setImage(ImageFactory.getInstance().getBombs(3));
     }
 }
