@@ -1,51 +1,46 @@
 package fr.ubx.poo.model.go;
 
 
-import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.Position;
-import fr.ubx.poo.engine.GameEngine;
-import fr.ubx.poo.model.decor.*;
 
 
 public class Bombs extends GameObject{
-    public GameEngine gameEngine;
-    public boolean BombRequested;
-
     public Bombs(Game game, Position position){
         super(game,position);
     }
 
-    public GameEngine getGameEngine() {
-        return gameEngine;
+    @Override
+    public Position getPosition() {
+        return super.getPosition();
     }
 
-    public void requestBomb(Position position) {
-        if (position != getPosition()) {
-            setPosition(position);
-        }
-        BombRequested = true;
+    @Override
+    public void setPosition(Position position) {
+        super.setPosition(position);
     }
 
-    public int getTimer(){
-        return (int) getGameEngine().getNow();
+    public long bomb_time(){
+        return game.getPlayer().getBombRequestedTimer();
     }
-    public Bombs bombActions(int i) {
-        if (i == 0) {
-            return new Bomb4(game, getPosition());
+
+    public int bomb_getter(){
+        if (bomb_time() - 1 == 0){
+            return 0;
         }
-        if (i == 1) {
-            return new Bomb3(game, getPosition());
+        if (bomb_time() - 2 == 0){
+            return 1;
         }
-        if (i == 2) {
-            return new Bomb2(game, getPosition());
+        if (bomb_time() - 3 == 0){
+            return 2;
         }
-        if (i == 3) {
-            return new Bomb1(game, getPosition());
+        if (bomb_time() - 4 == 0){
+            return 3;
         }
-        if (i == 4) {
-            return new Explosion(game, getPosition());
+        if (bomb_time() - 5 == 0){
+            return 4;
         }
-        return null;
+        return 5;
     }
+
 }

@@ -1,6 +1,5 @@
 package fr.ubx.poo.view.sprite;
 
-import fr.ubx.poo.engine.GameEngine;
 import fr.ubx.poo.model.go.Bombs;
 import fr.ubx.poo.view.image.ImageFactory;
 import javafx.scene.effect.ColorAdjust;
@@ -18,6 +17,6 @@ public class SpriteBomb extends SpriteGameObject{
     @Override
     public void updateImage() {
         Bombs bombs = (Bombs) go;
-        setImage(ImageFactory.getInstance().getBombs(3));
+        setImage(ImageFactory.getInstance().getBombs(0));
     }
 }

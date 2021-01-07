@@ -5,16 +5,15 @@
 package fr.ubx.poo.engine;
 
 import fr.ubx.poo.game.Direction;
-import fr.ubx.poo.model.Movable;
 import fr.ubx.poo.model.go.Bombs;
 import fr.ubx.poo.model.go.GameObject;
 import fr.ubx.poo.view.sprite.Sprite;
+import fr.ubx.poo.view.sprite.SpriteBomb;
 import fr.ubx.poo.view.sprite.SpriteFactory;
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.Position;
 import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.model.go.character.Player;
-import fr.ubx.poo.model.go.character.Monster;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -37,7 +36,6 @@ public final class GameEngine {
     private final String windowTitle;
     private final Game game;
     private final Player player;
-    private final List<GameObject> bombList = new ArrayList<>();
     private final List<Sprite> sprites = new ArrayList<>();
     private final List<Sprite> spritesMonster= new ArrayList<>();
     private StatusBar statusBar;
@@ -45,9 +43,10 @@ public final class GameEngine {
     private Input input;
     private Stage stage;
     private Sprite spritePlayer;
+    private Sprite spriteBomb;
+    private Bombs bombs;
 
     private long cpt;
-    public long now;
 
     public GameEngine(final String windowTitle, Game game, final Stage stage) {
         this.windowTitle = windowTitle;
@@ -81,8 +80,8 @@ public final class GameEngine {
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
         spritePlayer = SpriteFactory.createPlayer(layer, player);
         game.getMonsterWorld().stream().map(monster -> SpriteFactory.createMonster(layer, monster)).forEach(spritesMonster::add);
+        spriteBomb = SpriteFactory.createBomb(layer, bombs);
         cpt=0;
-
     }
 
     protected final void buildAndSetGameLoop() {
@@ -132,9 +131,10 @@ public final class GameEngine {
                 }
             }
         }
-        if (input.isBomb() && player.getNbBombs()>1){
-            game.getWorld().set(player.getPosition(), new BombNumberInc());
-            player.setNbBombs(player.getNbBombs()-1);
+        if (input.isBomb() && player.getNbBombs()>0){
+            //game.getWorld().set(player.getPosition(), new BombNumberInc());
+            //player.setNbBombs(player.getNbBombs()-1);
+            player.requestBombTimer(now);
         }
         input.clear();
     }
@@ -219,7 +219,4 @@ public final class GameEngine {
         gameLoop.start();
     }
 
-    public long getNow() {
-        return now;
-    }
 }
