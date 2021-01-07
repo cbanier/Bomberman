@@ -18,8 +18,6 @@ public class Game {
 
     private World world;
     private final Player player;
-    private final Monster monster;
-    private final Bombs bombs;
     private final List<List<Monster>> monsterList;
     private List<Monster> monsterWorld;
     private final String worldPath;
@@ -52,7 +50,6 @@ public class Game {
         Position positionPlayer=null;
         try {
             positionPlayer = world.findPlayer();
-            bombs = new Bombs(this, positionPlayer);
             player = new Player(this, positionPlayer);
         } catch (PositionNotFoundException e) {
             System.err.println("Position not found : " + e.getLocalizedMessage());
@@ -129,10 +126,6 @@ public class Game {
                 worlds.get(i).getMonsters().add(new Monster(this, worlds.get(i).findMonster().get(j)));
             }
         }
-    }
-
-    public Bombs getBombs() {
-        return bombs;
     }
 
     public String getWorldPath() {
