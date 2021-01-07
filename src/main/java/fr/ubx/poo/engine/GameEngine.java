@@ -37,15 +37,15 @@ public final class GameEngine {
     private final String windowTitle;
     private final Game game;
     private final Player player;
-    private Monster monster;
     private final List<GameObject> bombList = new ArrayList<>();
     private final List<Sprite> sprites = new ArrayList<>();
+    private final List<Sprite> spritesMonster= new ArrayList<>();
     private StatusBar statusBar;
     private Pane layer;
     private Input input;
     private Stage stage;
     private Sprite spritePlayer;
-    private Sprite spriteMonster;
+
     private long cpt;
     public long now;
 
@@ -53,7 +53,6 @@ public final class GameEngine {
         this.windowTitle = windowTitle;
         this.game = game;
         this.player = game.getPlayer();
-        this.monster=game.getMonster();
         initialize(stage, game);
         buildAndSetGameLoop();
     }
@@ -81,7 +80,10 @@ public final class GameEngine {
         // Create decor sprites
         game.getWorld().forEach( (pos,d) -> sprites.add(SpriteFactory.createDecor(layer, pos, d)));
         spritePlayer = SpriteFactory.createPlayer(layer, player);
-        spriteMonster= SpriteFactory.createMonster(layer, monster);
+        for (int i=0; i<3 ; i++){
+            game.getMonsterList().get(i).stream().map(monster -> SpriteFactory.createMonster(layer, monster));
+        }
+        game.getMonsterWorld().stream().map(monster -> SpriteFactory.createMonster(layer, monster)).forEach(spritesMonster::add);
         cpt=0;
 
     }
@@ -164,9 +166,7 @@ public final class GameEngine {
         player.update(now);
         cpt++;
         if (cpt%60==0){
-            Direction dir= Direction.random();
-            monster.requestMove(dir);
-            monster.doMove(dir);
+            game.getMonsterList().forEach(L-> L.forEach(monster -> {monster.requestMove(Direction.random()); monster.doMove(monster.getDirection()); } ));
         }
         if(game.getWorld().hasChanged()){
             sprites.forEach(Sprite::remove);
@@ -211,7 +211,7 @@ public final class GameEngine {
         sprites.forEach(Sprite::render);
         // last rendering to have player in the foreground
         spritePlayer.render();
-        spriteMonster.render();
+        spritesMonster.forEach(Sprite::render);
     }
 
     public void start() {

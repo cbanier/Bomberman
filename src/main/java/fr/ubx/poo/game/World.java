@@ -22,6 +22,7 @@ public class World {
     private final Map<Position, Decor> grid;
     private final WorldEntity[][] raw;
     public final Dimension dimension;
+    private final List<Monster> monsters;
     private boolean changed = false; 
     private boolean Up= false;
     private boolean Down=false;
@@ -38,11 +39,17 @@ public class World {
         this.raw = raw;
         dimension = new Dimension(raw.length, raw[0].length);
         grid = WorldBuilder.build(raw, dimension);
+        monsters= new ArrayList<>();
         changed = false; 
         Up= false;
         Down=false;
     }
-    
+
+    public List<Monster> getMonsters() {
+        return monsters;
+    }
+
+
     public void setChanged(){
         changed= true;
     }
@@ -78,16 +85,19 @@ public class World {
         throw new PositionNotFoundException("Player");
     }
 
-    public Position findMonster(){
+    public List<Position> findMonster() {
+        List<Position> monsterPos = new ArrayList<>();
         for (int x = 0; x < dimension.width; x++) {
             for (int y = 0; y < dimension.height; y++) {
                 if (raw[y][x] == WorldEntity.Monster) {
-                    return new Position(x, y);
+                    monsterPos.add(new Position(x, y));
+
                 }
             }
         }
-        return null;
+        return monsterPos;
     }
+
 
     public Position finDoorN() {
         for (int x = 0; x < dimension.width; x++) {
