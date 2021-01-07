@@ -6,7 +6,6 @@ package fr.ubx.poo.model.go.character;
 import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.Position;
-import fr.ubx.poo.game.WorldEntity;
 import fr.ubx.poo.model.Movable;
 import fr.ubx.poo.model.go.GameObject;
 import fr.ubx.poo.game.Game;
@@ -20,6 +19,8 @@ public class Player extends GameObject implements Movable {
     private boolean winner;
     private int nbBombs = 1;
     private int bombRange = 1;
+    private boolean bombRequested = false;
+    private long bombRequestedTimer;
 
     public Player(Game game, Position position) {
         super(game, position);
@@ -148,6 +149,9 @@ public class Player extends GameObject implements Movable {
                 doMove(direction);
             }
         }
+        if (bombRequested) {
+            doExplosion(now);
+        }
         moveRequested = false;
     }
 
@@ -173,5 +177,52 @@ public class Player extends GameObject implements Movable {
 
     public void setBombRange(int bombRange) {
         this.bombRange = bombRange;
+    }
+
+    /// BOMBS EXPLOSION
+    public long getBombRequestedTimer() {
+        return bombRequestedTimer;
+    }
+
+    public void requestBombTimer(long now){
+        bombRequested = true;
+        this.bombRequestedTimer = now;
+    }
+
+    public Position getBombToExplosePos(){
+        //ie pos of player when he launch it
+        return this.getPosition();
+    }
+    // EQUIVALENT DE DOMOVE POUR LES MOVABLE
+    // TO DO ++++++
+    public void doExplosion(long state) {
+
+    }
+    //determine in function of bombRange what's can be destroyed arround the bomb
+    public boolean canDestroy(Direction direction) {
+        Position posArroundBomb_range1 = direction.nextPosition(getBombToExplosePos());
+        Position posArroundBomb_range2 = direction.nextPosition(posArroundBomb_range1);
+        if (getBombRange()>1){
+            if (game.getWorld().get(posArroundBomb_range1) instanceof Box){
+                return true;
+            }
+            else if (game.getWorld().get(posArroundBomb_range2) instanceof Box){
+                return true;
+            }
+        }
+        else {
+            if (game.getWorld().get(posArroundBomb_range1) instanceof Box){
+                return true;
+            }
+        }
+        return false;
+    }
+    //make the destruction
+    public void doDestroy() {
+        for (Direction d : Direction.values()){
+            if (canDestroy(d)){
+                //effacer l'élément en question
+            }
+        }
     }
 }
