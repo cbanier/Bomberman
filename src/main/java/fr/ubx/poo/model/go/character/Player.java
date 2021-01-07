@@ -52,9 +52,6 @@ public class Player extends GameObject implements Movable {
         if (game.getWorld().isEmpty(nextPos)){
             return nextPos.inside(game.getWorld().dimension);
         }
-        if(game.getMonster().getPosition()==game.getPlayer().getPosition()){
-            return true;
-        }
         if (game.getWorld().get(nextPos) instanceof Princess){
             return true;
         }
@@ -91,10 +88,8 @@ public class Player extends GameObject implements Movable {
     public void doMove(Direction direction) {
         Position nextPos = direction.nextPosition(getPosition());
         Position next=direction.nextPosition(nextPos);
-        Monster monster= game.getMonster();
         if (game.getWorld().get(nextPos) instanceof Box){
-            if (monster.getPosition().equals(next)){ ;}
-            if (game.getWorld().isEmpty(next)){
+            if (game.getWorld().isEmpty(next) && !game.getMonsterWorld().stream().anyMatch(monster -> monster.getPosition().equals(next))){
                 if(next.inside(game.getWorld().dimension)){
                 game.getWorld().set(next,game.getWorld().get(nextPos));
                 game.getWorld().clear(nextPos);
@@ -103,7 +98,8 @@ public class Player extends GameObject implements Movable {
         }
         else{
             setPosition(nextPos);
-            if(monster.getPosition().equals(game.getPlayer().getPosition())){
+
+            if (game.getMonsterWorld().stream().anyMatch(monster -> monster.getPosition().equals(nextPos))){
                 setLives(getLives()-1);
             }
             if (game.getWorld().get(nextPos) instanceof Key){

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-import fr.ubx.poo.model.go.Bombs;
 import fr.ubx.poo.model.go.character.Player;
 import fr.ubx.poo.model.go.character.Monster;
 
@@ -21,6 +20,8 @@ public class Game {
     private final Player player;
     private final Monster monster;
     private final Bombs bombs;
+    private final List<List<Monster>> monsterList;
+    private List<Monster> monsterWorld;
     private final String worldPath;
     public int initPlayerLives;
     public int initnbKey;
@@ -41,9 +42,14 @@ public class Game {
         }
         actualLevel=1;
         world = worlds.get(actualLevel-1);
-        Position positionMonster=world.findMonster();
-        monster= new Monster(this, positionMonster);
-        Position positionPlayer = null;
+        monsterList =  new ArrayList<List<Monster>>(levels);
+        monsterWorld = new ArrayList<>();
+        loadAllMonster();
+        for (int i=0; i< levels; i++){
+            monsterList.add(i, worlds.get(i).getMonsters());
+        }
+        monsterWorld=monsterList.get(getActualLevel()-1);
+        Position positionPlayer=null;
         try {
             positionPlayer = world.findPlayer();
             bombs = new Bombs(this, positionPlayer);
@@ -98,8 +104,31 @@ public class Game {
         return this.player;
     }
 
-    public Monster getMonster() {
-        return this.monster;
+    public List<List<Monster>> getMonsterList() {
+        return monsterList;
+    }
+
+    public List<Monster> getMonsterWorld() {
+        return monsterWorld;
+    }
+
+    private void loadMonster() {
+        monsterWorld.clear();
+        for (int i = 0; i < world.findMonster().size(); i++) {
+            monsterWorld.add(new Monster(this, world.findMonster().get(i)));
+        }
+    }
+
+
+    private void loadAllMonster() {
+        for (int i=0; i<levels;i++){
+            worlds.get(i).getMonsters().clear();
+        }
+        for (int i=0; i<levels;i++){
+            for (int j = 0; j < this.world.findMonster().size(); j++) {
+                worlds.get(i).getMonsters().add(new Monster(this, worlds.get(i).findMonster().get(j)));
+            }
+        }
     }
 
     public Bombs getBombs() {
@@ -113,10 +142,13 @@ public class Game {
     public void UpWorld(){
         actualLevel=actualLevel+1;
         world=worlds.get(actualLevel-1);
+        loadMonster();
+
     }
 
     public void DownWorld(){
         actualLevel=actualLevel-1;
         world=worlds.get(actualLevel-1);
+        loadMonster();
     }
 }
