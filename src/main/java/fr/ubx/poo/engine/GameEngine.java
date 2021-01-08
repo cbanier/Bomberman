@@ -130,10 +130,14 @@ public final class GameEngine {
                 }
             }
         }
-        if (input.isBomb() && player.getNbBombs()>0){
+        if (input.isBomb() && player.getNbBombs()>0 && player.getNbBombsfuse()< player.getNbBombs()){
             //game.getWorld().set(player.getPosition(), new BombNumberInc());
+            player.setNbBombsfuse(player.getNbBombsfuse()+1);
+            bombs= new Bombs(game, game.getPlayer().getPosition());
+            spriteBomb= SpriteFactory.createBomb(layer, bombs);
+            spriteBomb.render();
             //player.setNbBombs(player.getNbBombs()-1);
-            player.requestBombTimer(now);
+            //player.requestBombTimer(now);
         }
         input.clear();
     }
@@ -163,6 +167,32 @@ public final class GameEngine {
         cpt++;
         if (cpt%60==0){
             game.getMonsterList().forEach(L -> L.forEach(monster -> {monster.requestMove(Direction.random()); monster.doMove(monster.getDirection()); } ));
+            bombs.setStateBomb(bombs.getStateBomb()+1);
+            if(bombs.getStateBomb()==1){
+                spriteBomb.remove();
+                spriteBomb=SpriteFactory.createBomb(layer, bombs);
+                spriteBomb.render();
+            }
+            if(bombs.getStateBomb()==2){
+                spriteBomb.remove();
+                spriteBomb=SpriteFactory.createBomb(layer, bombs);
+                spriteBomb.render();
+            }
+            if(bombs.getStateBomb()==3){
+                spriteBomb.remove();
+                spriteBomb=SpriteFactory.createBomb(layer, bombs);
+                spriteBomb.render();
+            }
+            if(bombs.getStateBomb()==4){
+                spriteBomb.remove();
+                spriteBomb=SpriteFactory.createBomb(layer, bombs);
+                spriteBomb.render();
+            }
+            if(bombs.getStateBomb()>4){
+                spriteBomb.remove();
+                player.setNbBombsfuse(player.getNbBombsfuse()-1);
+            }
+            
         }
         if(game.getWorld().hasChanged()){
             DecreaseLifePlayer();
@@ -213,6 +243,7 @@ public final class GameEngine {
         // last rendering to have player in the foreground
         spritePlayer.render();
         spritesMonster.forEach(Sprite::render);
+        
     }
 
     public void start() {
