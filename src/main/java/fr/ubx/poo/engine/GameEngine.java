@@ -186,6 +186,7 @@ public final class GameEngine {
                 spriteBomb.remove();
                 spriteBomb=SpriteFactory.createBomb(layer, bomb);
                 bomb.doDestroy();
+                player.setNbBombs(player.getNbBombs()+1);
                 game.getMonsterList().forEach(L -> L.removeIf(monster -> !monster.isAlive()));
                 spritesMonster.forEach(Sprite::remove);
                 spritesMonster.clear();
@@ -193,7 +194,6 @@ public final class GameEngine {
                 spriteBomb.render();
             }
             if(bomb.getStateBomb()>4){
-                player.setNbBombs(player.getNbBombs()+1);
                 spriteBomb.remove();
                 player.setNbBombsfuse(player.getNbBombsfuse()-1);
             }
