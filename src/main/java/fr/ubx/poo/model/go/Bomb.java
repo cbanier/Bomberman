@@ -1,6 +1,7 @@
 package fr.ubx.poo.model.go;
 
 
+<<<<<<< HEAD:src/main/java/fr/ubx/poo/model/go/Bomb.java
 import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.Position;
@@ -14,6 +15,33 @@ public class Bombs extends GameObject{
     public Bombs(Game game, Position position){
         super(game,position);
         this.bombState = 0;
+=======
+import fr.ubx.poo.model.decor.*;
+import fr.ubx.poo.game.Direction;
+import fr.ubx.poo.game.Position;
+import fr.ubx.poo.model.Movable;
+import fr.ubx.poo.model.go.GameObject;
+import fr.ubx.poo.game.Game;
+
+
+
+public class Bombs extends GameObject{
+    private int stateBomb;
+    private int range;
+
+    public Bombs(Game game, Position position){
+        super(game,position);
+        this.stateBomb=0;
+        range=game.getPlayer().getBombRange();
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
+>>>>>>> 54d0d85ad265f5fd377cebd0b60232aa80927c16:src/main/java/fr/ubx/poo/model/go/Bombs.java
     }
 
     @Override
@@ -45,6 +73,7 @@ public class Bombs extends GameObject{
         }
     }
 
+<<<<<<< HEAD:src/main/java/fr/ubx/poo/model/go/Bomb.java
     // EQUIVALENT DE DOMOVE POUR LES MOVABLE
     // TO DO ++++++
     public void doExplosion(long state) {
@@ -84,12 +113,41 @@ public class Bombs extends GameObject{
         }
         return false;
     }
+=======
+>>>>>>> 54d0d85ad265f5fd377cebd0b60232aa80927c16:src/main/java/fr/ubx/poo/model/go/Bombs.java
     //make the destruction
     public void doDestroy() {
         for (Direction d : Direction.values()){
-            if (canDestroy(d)){
-                //effacer l'élément en question
+            for (int i= 1 ; i <= this.range ; i++){
+                Position nextPos= d.nextPosition(this.getPosition(),i);
+                Position next= d.nextPosition(nextPos,i);
+                if (game.getWorld().get(nextPos) instanceof Box ||  game.getWorld().get(nextPos) instanceof BombNumberDec || 
+                 game.getWorld().get(nextPos) instanceof BombNumberInc || game.getWorld().get(nextPos) instanceof BombRangeDec || 
+                 game.getWorld().get(nextPos) instanceof BombNumberInc) {
+                    game.getWorld().clear(nextPos);
+                    game.getWorld().setChanged();
+                    if (game.getPlayer().getPosition().equals(next) ||  game.getWorld().getMonsters().stream().anyMatch(monster -> monster.getPosition().equals(next))){
+                        break;
+                    }
+                }
+                if (game.getPlayer().getPosition().equals(nextPos)) {
+                    game.getPlayer().setLives(game.getPlayer().getLives()-1);
+                }
+                if (game.getWorld().getMonsters().stream().anyMatch(monster -> monster.getPosition().equals(nextPos))) {
+                    game.getWorld().getMonsters().removeIf(monster -> monster.getPosition().equals(nextPos));
+                    game.getWorld().setChanged();
+                    if (game.getPlayer().getPosition().equals(nextPos)) {
+                        game.getPlayer().setLives(game.getPlayer().getLives()-1);
+                        break;
+                    }
+                }
+                if (!game.getWorld().isEmpty(nextPos)) {
+                }
             }
         }
+<<<<<<< HEAD:src/main/java/fr/ubx/poo/model/go/Bomb.java
     }
+=======
+    } 
+>>>>>>> 54d0d85ad265f5fd377cebd0b60232aa80927c16:src/main/java/fr/ubx/poo/model/go/Bombs.java
 }

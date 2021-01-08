@@ -62,7 +62,7 @@ public class Monster extends GameObject implements Movable {
             return false;
         }
         if (this.world.get(nextPos) instanceof BombNumberDec){
-            return false;
+            return true;
         }
         if (this.world.get(nextPos) instanceof BombNumberInc){
             return true;

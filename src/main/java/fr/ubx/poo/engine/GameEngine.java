@@ -186,6 +186,11 @@ public final class GameEngine {
             if(bombs.getStateBomb()==4){
                 spriteBomb.remove();
                 spriteBomb=SpriteFactory.createBomb(layer, bombs);
+                bombs.doDestroy();
+                game.getMonsterList().forEach(L -> L.removeIf(monster -> !monster.isAlive()));
+                spritesMonster.forEach(Sprite::remove);
+                spritesMonster.clear();
+                game.getWorld().getMonsters().stream().map(monster -> SpriteFactory.createMonster(layer, monster)).forEach(spritesMonster::add);
                 spriteBomb.render();
             }
             if(bombs.getStateBomb()>4){

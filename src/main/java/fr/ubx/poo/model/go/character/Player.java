@@ -133,9 +133,13 @@ public class Player extends GameObject implements Movable {
                 setNbBombs(getNbBombs()+1);
             }
             if (game.getWorld().get(nextPos) instanceof BombNumberDec){
-                if (getNbBombs()>1)
+                if (getNbBombs() > 1){
                     game.getWorld().clear(nextPos);
                     setNbBombs(getNbBombs()-1);
+                }
+                if (getNbBombs()<=1){
+                    game.getWorld().clear(nextPos);
+                }
             }
             if (game.getWorld().get(nextPos) instanceof BombRangeInc){
                 game.getWorld().clear(nextPos);
@@ -145,6 +149,9 @@ public class Player extends GameObject implements Movable {
                 if (getBombRange()>1){
                     game.getWorld().clear(nextPos);
                     setBombRange(getBombRange()-1);
+                }
+                if (getBombRange()==1){
+                    game.getWorld().clear(nextPos);
                 }
             }
         }
