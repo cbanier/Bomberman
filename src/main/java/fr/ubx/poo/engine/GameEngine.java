@@ -5,10 +5,8 @@
 package fr.ubx.poo.engine;
 
 import fr.ubx.poo.game.Direction;
-import fr.ubx.poo.model.go.Bombs;
-import fr.ubx.poo.model.go.GameObject;
+import fr.ubx.poo.model.go.Bomb;
 import fr.ubx.poo.view.sprite.Sprite;
-import fr.ubx.poo.view.sprite.SpriteBomb;
 import fr.ubx.poo.view.sprite.SpriteFactory;
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.Position;
@@ -44,7 +42,7 @@ public final class GameEngine {
     private Stage stage;
     private Sprite spritePlayer;
     private Sprite spriteBomb;
-    private Bombs bombs;
+    private Bomb bomb;
 
     private long cpt;
 
@@ -133,8 +131,9 @@ public final class GameEngine {
         if (input.isBomb() && player.getNbBombs()>0 && player.getNbBombsfuse()< player.getNbBombs()){
             //game.getWorld().set(player.getPosition(), new BombNumberInc());
             player.setNbBombsfuse(player.getNbBombsfuse()+1);
-            bombs= new Bombs(game, game.getPlayer().getPosition());
-            spriteBomb= SpriteFactory.createBomb(layer, bombs);
+            player.setNbBombs(player.getNbBombs()-1);
+            bomb = new Bomb(game, game.getPlayer().getPosition());
+            spriteBomb= SpriteFactory.createBomb(layer, bomb);
             spriteBomb.render();
             //player.setNbBombs(player.getNbBombs()-1);
             //player.requestBombTimer(now);
@@ -167,33 +166,34 @@ public final class GameEngine {
         cpt++;
         if (cpt%60==0){
             game.getMonsterList().forEach(L -> L.forEach(monster -> {monster.requestMove(Direction.random()); monster.doMove(monster.getDirection()); } ));
-            bombs.setStateBomb(bombs.getStateBomb()+1);
-            if(bombs.getStateBomb()==1){
+            bomb.setStateBomb(bomb.getStateBomb()+1);
+            if(bomb.getStateBomb()==1){
                 spriteBomb.remove();
-                spriteBomb=SpriteFactory.createBomb(layer, bombs);
+                spriteBomb=SpriteFactory.createBomb(layer, bomb);
                 spriteBomb.render();
             }
-            if(bombs.getStateBomb()==2){
+            if(bomb.getStateBomb()==2){
                 spriteBomb.remove();
-                spriteBomb=SpriteFactory.createBomb(layer, bombs);
+                spriteBomb=SpriteFactory.createBomb(layer, bomb);
                 spriteBomb.render();
             }
-            if(bombs.getStateBomb()==3){
+            if(bomb.getStateBomb()==3){
                 spriteBomb.remove();
-                spriteBomb=SpriteFactory.createBomb(layer, bombs);
+                spriteBomb=SpriteFactory.createBomb(layer, bomb);
                 spriteBomb.render();
             }
-            if(bombs.getStateBomb()==4){
+            if(bomb.getStateBomb()==4){
                 spriteBomb.remove();
-                spriteBomb=SpriteFactory.createBomb(layer, bombs);
-                bombs.doDestroy();
+                spriteBomb=SpriteFactory.createBomb(layer, bomb);
+                bomb.doDestroy();
                 game.getMonsterList().forEach(L -> L.removeIf(monster -> !monster.isAlive()));
                 spritesMonster.forEach(Sprite::remove);
                 spritesMonster.clear();
                 game.getWorld().getMonsters().stream().map(monster -> SpriteFactory.createMonster(layer, monster)).forEach(spritesMonster::add);
                 spriteBomb.render();
             }
-            if(bombs.getStateBomb()>4){
+            if(bomb.getStateBomb()>4){
+                player.setNbBombs(player.getNbBombs()+1);
                 spriteBomb.remove();
                 player.setNbBombsfuse(player.getNbBombsfuse()-1);
             }

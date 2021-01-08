@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-import fr.ubx.poo.model.go.Bombs;
 import fr.ubx.poo.model.go.character.Player;
 import fr.ubx.poo.model.go.character.Monster;
 
