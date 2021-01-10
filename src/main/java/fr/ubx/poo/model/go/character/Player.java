@@ -60,34 +60,7 @@ public class Player extends GameObject implements Movable {
         if (game.getWorld().isEmpty(nextPos)){
             return nextPos.inside(game.getWorld().dimension);
         }
-        if (game.getWorld().get(nextPos) instanceof Princess){
-            return true;
-        }
-        if (game.getWorld().get(nextPos) instanceof BombNumberDec){
-            return true;
-        }
-        if (game.getWorld().get(nextPos) instanceof BombNumberInc){
-            return true;
-        }
-        if (game.getWorld().get(nextPos) instanceof BombRangeInc){
-            return true;
-        }
-        if (game.getWorld().get(nextPos) instanceof BombRangeDec){
-            return true;
-        }
-        if (game.getWorld().get(nextPos) instanceof Heart){
-            return true;
-        }
-        if (game.getWorld().get(nextPos) instanceof Key){
-            return true;
-        }
-        if (game.getWorld().get(nextPos) instanceof Box){
-            return true;
-        }
-        if (game.getWorld().get(nextPos) instanceof DoorNextOpened){
-            return true;
-        }
-        if (game.getWorld().get(nextPos) instanceof DoorPrevOpened){
+        if (game.getWorld().get(nextPos).canWalkOnP()){
             return true;
         }
         return false;
@@ -106,54 +79,7 @@ public class Player extends GameObject implements Movable {
         }
         else{
             setPosition(nextPos);
-            if (this.game.getWorld().getMonsters().stream().anyMatch(monster -> monster.getPosition().equals(nextPos))){
-                game.getWorld().setChanged();
-            }
-            if (game.getWorld().get(nextPos) instanceof Key){
-                game.initnbKey=1;
-                game.getWorld().clear(nextPos);
-            }
-            if (game.getWorld().get(nextPos) instanceof DoorNextOpened){
-                game.UpWorld();
-                game.getWorld().SetUp();
-            }
-            if (game.getWorld().get(nextPos) instanceof DoorPrevOpened){
-                game.DownWorld();
-                game.getWorld().SetDown();
-            }
-            if (game.getWorld().get(nextPos) instanceof Princess){
-                this.winner=true;
-            }
-            if (game.getWorld().get(nextPos) instanceof Heart){
-                game.getWorld().clear(nextPos);
-                setLives(getLives()+1);
-            }
-            if (game.getWorld().get(nextPos) instanceof BombNumberInc){
-                game.getWorld().clear(nextPos);
-                setNbBombs(getNbBombs()+1);
-            }
-            if (game.getWorld().get(nextPos) instanceof BombNumberDec){
-                if (getNbBombs() > 1){
-                    game.getWorld().clear(nextPos);
-                    setNbBombs(getNbBombs()-1);
-                }
-                if (getNbBombs()<=1){
-                    game.getWorld().clear(nextPos);
-                }
-            }
-            if (game.getWorld().get(nextPos) instanceof BombRangeInc){
-                game.getWorld().clear(nextPos);
-                setBombRange(getBombRange()+1);
-            }
-            if (game.getWorld().get(nextPos) instanceof BombRangeDec){
-                if (getBombRange()>1){
-                    game.getWorld().clear(nextPos);
-                    setBombRange(getBombRange()-1);
-                }
-                if (getBombRange()==1){
-                    game.getWorld().clear(nextPos);
-                }
-            }
+            PickBonus(nextPos);
         }
     }
 
@@ -188,6 +114,57 @@ public class Player extends GameObject implements Movable {
 
     public void setBombRange(int bombRange) {
         this.bombRange = bombRange;
+    }
+
+    public void PickBonus(Position nextPos){
+        if (this.game.getWorld().getMonsters().stream().anyMatch(monster -> monster.getPosition().equals(nextPos))){
+            game.getWorld().setChanged();
+        }
+        if (game.getWorld().get(nextPos) instanceof Key){
+            game.initnbKey=1;
+            game.getWorld().clear(nextPos);
+        }
+        if (game.getWorld().get(nextPos) instanceof DoorNextOpened){
+            game.UpWorld();
+            game.getWorld().SetUp();
+        }
+        if (game.getWorld().get(nextPos) instanceof DoorPrevOpened){
+            game.DownWorld();
+            game.getWorld().SetDown();
+        }
+        if (game.getWorld().get(nextPos) instanceof Princess){
+            this.winner=true;
+        }
+        if (game.getWorld().get(nextPos) instanceof Heart){
+            game.getWorld().clear(nextPos);
+            setLives(getLives()+1);
+        }
+        if (game.getWorld().get(nextPos) instanceof BombNumberInc){
+            game.getWorld().clear(nextPos);
+            setNbBombs(getNbBombs()+1);
+        }
+        if (game.getWorld().get(nextPos) instanceof BombNumberDec){
+            if (getNbBombs() > 1){
+                game.getWorld().clear(nextPos);
+                setNbBombs(getNbBombs()-1);
+            }
+            if (getNbBombs()<=1){
+                game.getWorld().clear(nextPos);
+            }
+        }
+        if (game.getWorld().get(nextPos) instanceof BombRangeInc){
+            game.getWorld().clear(nextPos);
+            setBombRange(getBombRange()+1);
+        }
+        if (game.getWorld().get(nextPos) instanceof BombRangeDec){
+            if (getBombRange()>1){
+                game.getWorld().clear(nextPos);
+                setBombRange(getBombRange()-1);
+            }
+            if (getBombRange()==1){
+                game.getWorld().clear(nextPos);
+            }
+        }
     }
 
 }

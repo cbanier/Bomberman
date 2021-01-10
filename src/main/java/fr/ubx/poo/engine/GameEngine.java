@@ -36,13 +36,13 @@ public final class GameEngine {
     private final Player player;
     private final List<Sprite> sprites = new ArrayList<>();
     private final List<Sprite> spritesMonster= new ArrayList<>();
+    private final List<Sprite> spritesBomb= new ArrayList<>();
     private StatusBar statusBar;
     private Pane layer;
     private Input input;
     private Stage stage;
     private Sprite spritePlayer;
-    private Sprite spriteBomb;
-    private Bomb bomb;
+
 
     private long cpt;
 
@@ -129,14 +129,7 @@ public final class GameEngine {
             }
         }
         if (input.isBomb() && player.getNbBombs()>0 && player.getNbBombsfuse()< player.getNbBombs()){
-            //game.getWorld().set(player.getPosition(), new BombNumberInc());
-            player.setNbBombsfuse(player.getNbBombsfuse()+1);
-            player.setNbBombs(player.getNbBombs()-1);
-            bomb = new Bomb(game, game.getPlayer().getPosition());
-            spriteBomb= SpriteFactory.createBomb(layer, bomb);
-            spriteBomb.render();
-            //player.setNbBombs(player.getNbBombs()-1);
-            //player.requestBombTimer(now);
+            createBomb();
         }
         input.clear();
     }
@@ -160,44 +153,14 @@ public final class GameEngine {
         }.start();
     }
 
-
     private void update(long now) {
         player.update(now);
         cpt++;
         if (cpt%60==0){
             game.getMonsterList().forEach(L -> L.forEach(monster -> {monster.requestMove(Direction.random()); monster.doMove(monster.getDirection()); } ));
-            bomb.setStateBomb(bomb.getStateBomb()+1);
-            if(bomb.getStateBomb()==1){
-                spriteBomb.remove();
-                spriteBomb=SpriteFactory.createBomb(layer, bomb);
-                spriteBomb.render();
+            if (spritesBomb.size()>0){
+                BombsActionAndRender();
             }
-            if(bomb.getStateBomb()==2){
-                spriteBomb.remove();
-                spriteBomb=SpriteFactory.createBomb(layer, bomb);
-                spriteBomb.render();
-            }
-            if(bomb.getStateBomb()==3){
-                spriteBomb.remove();
-                spriteBomb=SpriteFactory.createBomb(layer, bomb);
-                spriteBomb.render();
-            }
-            if(bomb.getStateBomb()==4){
-                spriteBomb.remove();
-                spriteBomb=SpriteFactory.createBomb(layer, bomb);
-                bomb.doDestroy();
-                player.setNbBombs(player.getNbBombs()+1);
-                game.getMonsterList().forEach(L -> L.removeIf(monster -> !monster.isAlive()));
-                spritesMonster.forEach(Sprite::remove);
-                spritesMonster.clear();
-                game.getWorld().getMonsters().stream().map(monster -> SpriteFactory.createMonster(layer, monster)).forEach(spritesMonster::add);
-                spriteBomb.render();
-            }
-            if(bomb.getStateBomb()>4){
-                spriteBomb.remove();
-                player.setNbBombsfuse(player.getNbBombsfuse()-1);
-            }
-            
         }
         if(game.getWorld().hasChanged()){
             DecreaseLifePlayer();
@@ -208,29 +171,11 @@ public final class GameEngine {
         }
 
         if (game.getWorld().hasUp()){
-            stage.close();
-            sprites.forEach(Sprite::remove);
-            sprites.clear();
-            spritePlayer.remove();
-            spritesMonster.forEach(Sprite::remove);
-            spritesMonster.clear();
-            initialize(stage, game);
-            Position pos =game.getWorld().finDoorN();
-            player.setPosition(pos);
-            game.getWorld().SetUpfinish();
+            levelUp();
         }
 
         if (game.getWorld().hasDown()){
-            stage.close();
-            sprites.forEach(Sprite::remove);
-            sprites.clear();
-            spritePlayer.remove();
-            spritesMonster.forEach(Sprite::remove);
-            spritesMonster.clear();
-            initialize(stage, game);
-            Position pos =game.getWorld().finDoorP();
-            player.setPosition(pos);
-            game.getWorld().SetDownfinish();
+            levelDown();
         }
 
         if (player.isAlive() == false) {
@@ -248,7 +193,6 @@ public final class GameEngine {
         // last rendering to have player in the foreground
         spritePlayer.render();
         spritesMonster.forEach(Sprite::render);
-        
     }
 
     public void start() {
@@ -263,6 +207,71 @@ public final class GameEngine {
             }
             else{ ;}
         }
+    }
+
+    public void levelDown(){
+        stage.close();
+        sprites.forEach(Sprite::remove);
+        sprites.clear();
+        spritePlayer.remove();
+        spritesMonster.forEach(Sprite::remove);
+        spritesMonster.clear();
+        initialize(stage, game);
+        spritesBomb.forEach(Sprite::remove);
+        spritesBomb.clear();
+        game.getBombList().get(game.getActualLevel()-1).forEach(bomb -> spritesBomb.add(SpriteFactory.createBomb(layer, bomb)));
+        spritesBomb.forEach(Sprite::render);
+        Position pos =game.getWorld().finDoorP();
+        player.setPosition(pos);
+        game.getWorld().SetDownfinish();
+    }
+
+    public void levelUp(){
+        stage.close();
+        sprites.forEach(Sprite::remove);
+        sprites.clear();
+        spritePlayer.remove();
+        spritesMonster.forEach(Sprite::remove);
+        spritesMonster.clear();
+        initialize(stage, game);
+        spritesBomb.forEach(Sprite::remove);
+        spritesBomb.clear();
+        game.getBombList().get(game.getActualLevel()-1).forEach(bomb -> spritesBomb.add(SpriteFactory.createBomb(layer, bomb)));
+        spritesBomb.forEach(Sprite::render);
+        Position pos =game.getWorld().finDoorN();
+        player.setPosition(pos);
+        game.getWorld().SetUpfinish();
+    }
+
+    public void createBomb(){
+        player.setNbBombsfuse(player.getNbBombsfuse()+1);
+        Bomb bomb = new Bomb(game, game.getPlayer().getPosition());
+        game.getWorld().getBombs().add(bomb);
+        spritesBomb.add(SpriteFactory.createBomb(layer, bomb));
+        spritesBomb.forEach(Sprite::render);
+    }
+    // porbleme de gestions de la liste de bombe affichage et apres remettre le bon nombre de bombe possible a poser.
+    // version avec une bombe marche regarder commit 54d0d85ad265f5fd377cebd0b60232aa80927c16
+    public void BombsActionAndRender(){
+        game.getBombList().forEach(L -> L.forEach(bomb -> bomb.setStateBomb(bomb.getStateBomb()+1)));
+        spritesBomb.forEach(Sprite::render);
+        game.getBombList().forEach(L -> L.forEach(bomb ->{ 
+            if(bomb.getStateBomb()==4){
+                bomb.doDestroy();
+                player.setNbBombsfuse(player.getNbBombsfuse()-1);
+                game.getMonsterList().forEach(List -> List.removeIf(monster -> !monster.isAlive()));
+                spritesMonster.forEach(Sprite::remove);
+                spritesMonster.clear();
+                game.getWorld().getMonsters().stream().map(monster -> SpriteFactory.createMonster(layer, monster)).forEach(spritesMonster::add);}}));
+        int size = game.getBombList().get(game.getActualLevel()-1).size();
+        game.getBombList().forEach(L-> L.removeIf(bomb -> bomb.getStateBomb()==4));
+        int size2 = game.getBombList().get(game.getActualLevel()-1).size();
+        spritesBomb.forEach(Sprite::remove);
+        spritesBomb.clear();
+        game.getBombList().get(game.getActualLevel()-1).forEach(bomb -> spritesBomb.add(SpriteFactory.createBomb(layer, bomb)));
+        if (spritesBomb.size()>0){ spritesBomb.forEach(Sprite::render); }
+        player.setNbBombsfuse(player.getNbBombsfuse()-(size-size2));
+
     }
 
 }

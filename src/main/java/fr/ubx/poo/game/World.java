@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import fr.ubx.poo.model.go.character.Monster;
+import fr.ubx.poo.model.go.Bomb;
 
 import fr.ubx.poo.game.Game;
 
@@ -23,6 +24,7 @@ public class World {
     private final WorldEntity[][] raw;
     public final Dimension dimension;
     private final List<Monster> monsters;
+    private final List<Bomb> bombs;
     private boolean changed = false; 
     private boolean Up= false;
     private boolean Down=false;
@@ -40,6 +42,7 @@ public class World {
         dimension = new Dimension(raw.length, raw[0].length);
         grid = WorldBuilder.build(raw, dimension);
         monsters= new ArrayList<>();
+        bombs = new ArrayList<>();
         changed = false; 
         Up= false;
         Down=false;
@@ -47,6 +50,10 @@ public class World {
 
     public List<Monster> getMonsters() {
         return monsters;
+    }
+
+    public List<Bomb> getBombs() {
+        return bombs;
     }
 
 

@@ -7,17 +7,25 @@ import fr.ubx.poo.game.Position;
 import fr.ubx.poo.model.Movable;
 import fr.ubx.poo.model.go.GameObject;
 import fr.ubx.poo.game.Game;
+import fr.ubx.poo.game.World;
+import fr.ubx.poo.game.WorldEntity;
 
 
 
 public class Bomb extends GameObject{
     private int stateBomb;
     private int range;
+    private World world;
 
     public Bomb(Game game, Position position){
         super(game,position);
         this.stateBomb=0;
         range=game.getPlayer().getBombRange();
+        world=game.getWorlds().get(game.getActualLevel()-1);
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public int getRange() {

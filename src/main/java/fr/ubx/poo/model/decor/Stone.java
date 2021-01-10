@@ -9,4 +9,12 @@ public class Stone extends Decor {
     public String toString() {
         return "Stone";
     }
+
+    public boolean canWalkOnP() {
+        return false;
+    }
+
+    public boolean canWalkOnM() {
+        return false;
+    }
 }

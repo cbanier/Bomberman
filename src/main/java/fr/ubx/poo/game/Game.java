@@ -13,12 +13,14 @@ import java.util.*;
 
 import fr.ubx.poo.model.go.character.Player;
 import fr.ubx.poo.model.go.character.Monster;
+import fr.ubx.poo.model.go.Bomb;
 
 public class Game {
 
     private World world;
     private final Player player;
     private final List<List<Monster>> monsterList;
+    private List<List<Bomb>> bombList;
     private final String worldPath;
     public int initPlayerLives;
     public int initnbKey;
@@ -40,9 +42,11 @@ public class Game {
         actualLevel=1;
         world = worlds.get(actualLevel-1);
         monsterList =  new ArrayList<List<Monster>>(levels);
+        bombList =  new ArrayList<List<Bomb>>(levels);
         loadAllMonster();
         for (int i=0; i< levels; i++){
             monsterList.add(i, worlds.get(i).getMonsters());
+            bombList.add(i, worlds.get(i).getBombs());
         }
         Position positionPlayer=null;
         try {
@@ -108,6 +112,10 @@ public class Game {
 
     public List<List<Monster>> getMonsterList() {
         return monsterList;
+    }
+
+    public List<List<Bomb>> getBombList() {
+        return bombList;
     }
 
     private void loadAllMonster() {

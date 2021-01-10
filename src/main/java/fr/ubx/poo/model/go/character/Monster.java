@@ -52,34 +52,7 @@ public class Monster extends GameObject implements Movable {
         if (this.world.isEmpty(nextPos)){
             return nextPos.inside(world.dimension);
         }
-        if (this.world.get(nextPos) instanceof Princess){
-            return false;
-        }
-        if (this.world.get(nextPos) instanceof Stone){
-            return false;
-        }
-        if (this.world.get(nextPos) instanceof Tree){
-            return false;
-        }
-        if (this.world.get(nextPos) instanceof BombNumberDec){
-            return true;
-        }
-        if (this.world.get(nextPos) instanceof BombNumberInc){
-            return true;
-        }
-        if (this.world.get(nextPos) instanceof BombRangeInc){
-            return true;
-        }
-        if (this.world.get(nextPos) instanceof BombRangeDec){
-            return true;
-        }
-        if (this.world.get(nextPos) instanceof Heart){
-            return true;
-        }
-        if (world.get(nextPos) instanceof Key){
-            return true;
-        }
-        if(nextPos==game.getPlayer().getPosition()){
+        if(this.world.get(nextPos).canWalkOnM()){
             return true;
         }
         return false;
