@@ -1,9 +1,7 @@
 package fr.ubx.poo.model.decor;
 
 public class Box extends Decor{
-    
 
-    @Override
     public boolean canWalkOnP() {
         return true;
     }
@@ -12,5 +10,8 @@ public class Box extends Decor{
         return false;
     }
 
-    public String toString() {return "Box";}
+    @Override
+    public String toString() {
+        return "Box";
+    }
 }

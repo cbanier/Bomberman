@@ -71,7 +71,7 @@ public final class ImageFactory {
     }
 
     public Image getBombs(int state){
-        if (state < -1 || state > 5)
+        if (state < 0 || state > 5)
             throw new IllegalArgumentException();
         return get(bombs_states[state]);
     }

@@ -4,36 +4,24 @@ package fr.ubx.poo.model.go;
 import fr.ubx.poo.model.decor.*;
 import fr.ubx.poo.game.Direction;
 import fr.ubx.poo.game.Position;
-import fr.ubx.poo.model.Movable;
-import fr.ubx.poo.model.go.GameObject;
 import fr.ubx.poo.game.Game;
 import fr.ubx.poo.game.World;
-import fr.ubx.poo.game.WorldEntity;
-
 
 
 public class Bomb extends GameObject{
     private int stateBomb;
-    private int range;
     private World world;
+    private final Box box = new Box();
+
 
     public Bomb(Game game, Position position){
         super(game,position);
-        this.stateBomb=0;
-        range=game.getPlayer().getBombRange();
+        this.stateBomb = 0;
         world=game.getWorlds().get(game.getActualLevel()-1);
     }
 
     public World getWorld() {
         return world;
-    }
-
-    public int getRange() {
-        return range;
-    }
-
-    public void setRange(int range) {
-        this.range = range;
     }
 
     @Override
@@ -56,10 +44,21 @@ public class Bomb extends GameObject{
     //make the destruction
     public void doDestroy() {
         for (Direction d : Direction.values()){
-            for (int i= 1 ; i <= this.range ; i++){
-                Position nextPos= d.nextPosition(this.getPosition(),i);
-                Position next= d.nextPosition(nextPos,i);
-                if (game.getWorld().get(nextPos) instanceof Box ||  game.getWorld().get(nextPos) instanceof BombNumberDec ||
+            for (int i= 1 ; i <= game.getPlayer().getBombRange() ; i++){
+                Position nextPos = d.nextPosition(this.getPosition(),i);
+                Position next = d.nextPosition(nextPos,i);
+                // Gestion des Box sur la map
+                if (game.getWorld().get(nextPos) instanceof Box && game.getPlayer().getBombRange() > 1){
+                    if (nextPos.equals(d.nextPosition(this.getPosition(),1))){
+                        game.getWorld().clear(nextPos);
+                        game.getWorld().setChanged();
+                    }
+                }else if (game.getWorld().get(nextPos) instanceof Box){
+                    game.getWorld().clear(nextPos);
+                    game.getWorld().setChanged();
+                }
+                // Gestion des autres éléments
+                if (game.getWorld().get(nextPos) instanceof BombNumberDec ||
                         game.getWorld().get(nextPos) instanceof BombNumberInc || game.getWorld().get(nextPos) instanceof BombRangeDec ||
                         game.getWorld().get(nextPos) instanceof BombNumberInc) {
                     game.getWorld().clear(nextPos);
@@ -80,6 +79,7 @@ public class Bomb extends GameObject{
                     }
                 }
                 if (!game.getWorld().isEmpty(nextPos)) {
+                    break;
                 }
             }
         }

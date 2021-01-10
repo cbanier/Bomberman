@@ -8,16 +8,13 @@ import fr.ubx.poo.model.decor.Decor;
 
 import java.util.Collection;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import fr.ubx.poo.model.go.character.Monster;
 import fr.ubx.poo.model.go.Bomb;
 
-import fr.ubx.poo.game.Game;
 
 public class World {
     private final Map<Position, Decor> grid;
@@ -25,9 +22,9 @@ public class World {
     public final Dimension dimension;
     private final List<Monster> monsters;
     private final List<Bomb> bombs;
-    private boolean changed = false; 
-    private boolean Up= false;
-    private boolean Down=false;
+    private boolean changed;
+    private boolean Up;
+    private boolean Down;
 
     public boolean hasChanged() { return changed; }
 
@@ -35,7 +32,6 @@ public class World {
 
     public boolean hasDown() { return Down; }
 
-    
 
     public World(WorldEntity[][] raw) {
         this.raw = raw;
@@ -44,8 +40,8 @@ public class World {
         monsters= new ArrayList<>();
         bombs = new ArrayList<>();
         changed = false; 
-        Up= false;
-        Down=false;
+        Up = false;
+        Down =false;
     }
 
     public List<Monster> getMonsters() {
@@ -145,8 +141,6 @@ public class World {
     public void forEach(BiConsumer<Position, Decor> fn) {
         grid.forEach(fn);
     }
-
-
 
     public Collection<Decor> values() {
         return grid.values();
