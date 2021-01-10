@@ -14,13 +14,15 @@ public class WorldFromFile extends World{
         try{
             BufferedReader in = new BufferedReader(new FileReader(file));
             String lineValue = in.readLine();
+            // la longueur de la première ligne est la largeur de la game
             int width = lineValue.length();
-
+            // stockage de chaque ligne du fichier txt dans une liste
             ArrayList<char[]> Lines = new ArrayList<>();
             while (lineValue != null){
                 Lines.add(lineValue.toCharArray());
                 lineValue = in.readLine();
             }
+            // création de la map
             WorldEntity[][] map = new WorldEntity[Lines.size()][width];
             for (int j=0;j<width;j++){
                 for (int i=0;i<Lines.size();i++){
